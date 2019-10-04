@@ -4,6 +4,8 @@ using System;
 
 namespace LudumDareTemplate.Graphics {
     public sealed class Renderer {
+        private readonly RendererSettings _defaultSettings = new RendererSettings();
+
         private readonly GraphicsDevice _graphicsDevice;
         private readonly SpriteBatch _spriteBatch;
 
@@ -11,6 +13,7 @@ namespace LudumDareTemplate.Graphics {
         private RenderTarget2D _renderTarget;
         private bool _boundsUpdatePending = false;
 
+        private RendererSettings _settings;
         private RenderTargetBinding[] _defaultTargets;
 
         public Renderer(GraphicsDevice graphicsDevice, GameWindow window) {
@@ -27,12 +30,16 @@ namespace LudumDareTemplate.Graphics {
 
         public Rectangle Bounds { get; private set; }
 
-        public void Begin() {
+        public void Begin(RendererSettings settings = null) {
+            _settings = settings ?? _defaultSettings;
+
             _defaultTargets = _graphicsDevice.GetRenderTargets();
             _graphicsDevice.SetRenderTarget(_renderTarget);
             _graphicsDevice.Clear(Color.TransparentBlack);
 
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(_settings.SortMode, _settings.BlendState, _settings.SamplerState,
+                _settings.DepthStencilState, _settings.RasterizerState, _settings.SpriteEffect, 
+                _settings.TransformMatrix);
         }
 
         public void Draw(Texture2D texture, Vector2 position,
@@ -52,7 +59,7 @@ namespace LudumDareTemplate.Graphics {
 
             _graphicsDevice.SetRenderTargets(_defaultTargets);
 
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(effect: _settings.LayerEffect);
             _spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
             _spriteBatch.End();
 
