@@ -44,6 +44,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Components\BodyComponent.cs" />
+    <Compile Include="Components\SpriteComponent.cs" />
+    <Compile Include="Components\TransformComponent.cs" />
     <Compile Include="Extensions\ICollectionExtensions.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\IListExtensions.cs" />
@@ -73,6 +75,8 @@
     <Compile Include="Screens\ScreenManager.cs" />
     <Compile Include="Screens\TitleScreen.cs" />
     <Compile Include="Systems\BodyPhysicsSystem.cs" />
+    <Compile Include="Systems\BodyTransformSystem.cs" />
+    <Compile Include="Systems\SpriteDrawingSystem.cs" />
     <Compile Include="Utilities\IServiceContainer.cs" />
     <Compile Include="Utilities\ServiceContainer.cs" />
   </ItemGroup>

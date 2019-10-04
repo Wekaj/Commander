@@ -14,6 +14,9 @@ namespace LD45.Screens {
 
         public void Initialize(IServiceProvider services) {
             _entityWorld.SystemManager.SetSystem(new BodyPhysicsSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new BodyTransformSystem(), GameLoopType.Update);
+
+            _entityWorld.SystemManager.SetSystem(new SpriteDrawingSystem(services), GameLoopType.Draw);
         }
 
         public void Update(GameTime gameTime) {
