@@ -3,6 +3,7 @@ using Artemis.Manager;
 using LD45.Components;
 using LD45.Graphics;
 using LD45.Systems;
+using LD45.Tiles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -12,8 +13,10 @@ using System;
 namespace LD45.Screens {
     public sealed class GameScreen : IScreen {
         private readonly EntityWorld _entityWorld = new EntityWorld();
+        private readonly TileMap _tileMap = new TileMap(64, 64);
 
         private Renderer2D _renderer;
+        private TileMapRenderer _tileMapRenderer;
 
         private Texture2D _personTexture;
 
@@ -23,9 +26,16 @@ namespace LD45.Screens {
 
         public void Initialize(IServiceProvider services) {
             _renderer = services.GetRequiredService<Renderer2D>();
+            _tileMapRenderer = new TileMapRenderer(services);
 
             LoadContent(services);
             InitializeSystems(services);
+
+            for (int y = 0; y < _tileMap.Height; y++) {
+                for (int x = 0; x < _tileMap.Width; x++) {
+                    _tileMap[x, y] = new Tile();
+                }
+            }
 
             Entity person = _entityWorld.CreateEntity();
             person.AddComponent(new BodyComponent());
@@ -55,6 +65,7 @@ namespace LD45.Screens {
         public void Draw(GameTime gameTime) {
             _renderer.Begin();
 
+            _tileMapRenderer.Draw(_tileMap);
             _entityWorld.Draw();
 
             _renderer.End();

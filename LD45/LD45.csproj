@@ -46,6 +46,7 @@
     <Compile Include="Components\BodyComponent.cs" />
     <Compile Include="Components\SpriteComponent.cs" />
     <Compile Include="Components\TransformComponent.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Extensions\ICollectionExtensions.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\IListExtensions.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="Extensions\Vector2Extensions.cs" />
     <Compile Include="Extensions\Vector3Extensions.cs" />
+    <Compile Include="Graphics\TileMapRenderer.cs" />
     <Compile Include="LD45Game.cs" />
     <Compile Include="Graphics\Camera2D.cs" />
     <Compile Include="Graphics\Renderer2D.cs" />
@@ -77,6 +79,8 @@
     <Compile Include="Systems\BodyPhysicsSystem.cs" />
     <Compile Include="Systems\BodyTransformSystem.cs" />
     <Compile Include="Systems\SpriteDrawingSystem.cs" />
+    <Compile Include="Tiles\Tile.cs" />
+    <Compile Include="Tiles\TileMap.cs" />
     <Compile Include="Utilities\IServiceContainer.cs" />
     <Compile Include="Utilities\ServiceContainer.cs" />
   </ItemGroup>
