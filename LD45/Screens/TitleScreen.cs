@@ -13,8 +13,6 @@ namespace LD45.Screens {
 
         private SpriteFont _basicFont;
 
-        private int _clickCounter;
-
         public event ScreenEventHandler PushedScreen;
         public event ScreenEventHandler ReplacedSelf;
         public event EventHandler PoppedSelf;
@@ -32,14 +30,14 @@ namespace LD45.Screens {
 
         public void Update(GameTime gameTime) {
             if (_input.Bindings.JustReleased(BindingId.LeftClick)) {
-                _clickCounter++;
+                ReplacedSelf?.Invoke(this, new ScreenEventArgs(new GameScreen()));
             }
         }
 
         public void Draw(GameTime gameTime) {
             _renderer.Begin();
 
-            _renderer.Draw(_basicFont, "Welcome to the title screen! Clicks: " + _clickCounter, new Vector2(8f));
+            _renderer.Draw(_basicFont, "Welcome to the title screen! Click to begin.", new Vector2(8f));
 
             _renderer.End();
         }
