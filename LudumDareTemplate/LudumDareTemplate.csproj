@@ -52,7 +52,8 @@
     <Compile Include="Extensions\Vector2Extensions.cs" />
     <Compile Include="Extensions\Vector3Extensions.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="Graphics\Renderer.cs" />
+    <Compile Include="Graphics\Camera2D.cs" />
+    <Compile Include="Graphics\Renderer2D.cs" />
     <Compile Include="Graphics\RendererSettings.cs" />
     <Compile Include="Input\BindingId.cs" />
     <Compile Include="Input\GamePadBinding.cs" />

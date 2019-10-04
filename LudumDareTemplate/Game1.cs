@@ -66,7 +66,7 @@ namespace LudumDareTemplate {
             AddBindings(_input.Bindings);
             _services.SetService(_input);
 
-            _services.SetService(new Renderer(GraphicsDevice, Window));
+            _services.SetService(new Renderer2D(GraphicsDevice, Window));
         }
 
         private void AddBindings(InputBindings bindings) {

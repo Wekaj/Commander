@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace LudumDareTemplate.Graphics {
-    public sealed class Renderer {
+    public sealed class Renderer2D {
         private readonly RendererSettings _defaultSettings = new RendererSettings();
 
         private readonly GraphicsDevice _graphicsDevice;
@@ -16,7 +16,7 @@ namespace LudumDareTemplate.Graphics {
         private RendererSettings _settings;
         private RenderTargetBinding[] _defaultTargets;
 
-        public Renderer(GraphicsDevice graphicsDevice, GameWindow window) {
+        public Renderer2D(GraphicsDevice graphicsDevice, GameWindow window) {
             _graphicsDevice = graphicsDevice;
             _spriteBatch = new SpriteBatch(graphicsDevice);
 

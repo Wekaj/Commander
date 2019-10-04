@@ -8,7 +8,7 @@ using System;
 
 namespace LudumDareTemplate.Screens {
     public sealed class TitleScreen : IScreen {
-        private Renderer _renderer;
+        private Renderer2D _renderer;
         private InputManager _input;
 
         private SpriteFont _basicFont;
@@ -20,7 +20,7 @@ namespace LudumDareTemplate.Screens {
         public event EventHandler PoppedSelf;
 
         public void Initialize(IServiceProvider services) {
-            _renderer = services.GetRequiredService<Renderer>();
+            _renderer = services.GetRequiredService<Renderer2D>();
             _input = services.GetRequiredService<InputManager>();
 
             LoadContent(services.GetRequiredService<ContentManager>());
