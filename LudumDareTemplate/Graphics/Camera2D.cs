@@ -2,14 +2,48 @@
 
 namespace Ruut.Graphics {
     public sealed class Camera2D {
-        public Vector2 Position { get; set; } = Vector2.Zero;
-        public float Zoom { get; set; } = 1f;
-        public float Rotation { get; set; } = 0f;
+        private Vector2 _position = Vector2.Zero;
+        private float _zoom = 1f;
+        private float _rotation = 0f;
+
+        private Matrix _transformMatrix = Matrix.Identity;
+        private Matrix _inverseMatrix = Matrix.Identity;
+        private bool _pendingUpdate = false;
+
+        public Vector2 Position {
+            get => _position;
+            set {
+                _position = value;
+                _pendingUpdate = true;
+            }
+        }
+
+        public float Zoom {
+            get => _zoom;
+            set {
+                _zoom = value;
+                _pendingUpdate = true;
+            }
+        }
+
+        public float Rotation {
+            get => _rotation;
+            set {
+                _rotation = value;
+                _pendingUpdate = true;
+            }
+        }
 
         public Matrix GetTransformMatrix() {
-            return Matrix.CreateTranslation(new Vector3(-Position.X, -Position.Y, 0f))
-                * Matrix.CreateScale(Zoom)
-                * Matrix.CreateRotationZ(Rotation);
+            UpdateMatrices();
+
+            return _transformMatrix;
+        }
+
+        public Matrix GetInverseMatrix() {
+            UpdateMatrices();
+
+            return _inverseMatrix;
         }
 
         public Vector2 ToView(Vector2 worldPosition) {
@@ -17,7 +51,18 @@ namespace Ruut.Graphics {
         }
 
         public Vector2 ToWorld(Vector2 viewPosition) {
-            return Vector2.Transform(viewPosition, Matrix.Invert(GetTransformMatrix()));
+            return Vector2.Transform(viewPosition, GetInverseMatrix());
+        }
+
+        private void UpdateMatrices() {
+            if (_pendingUpdate) {
+                _transformMatrix = Matrix.CreateTranslation(new Vector3(-_position.X, -_position.Y, 0f))
+                    * Matrix.CreateScale(_zoom)
+                    * Matrix.CreateRotationZ(_rotation);
+                _inverseMatrix = Matrix.Invert(_transformMatrix);
+
+                _pendingUpdate = false;
+            }
         }
     }
 }
