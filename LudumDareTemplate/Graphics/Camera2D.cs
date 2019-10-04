@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Ruut.Graphics {
+namespace LudumDareTemplate.Graphics {
     public sealed class Camera2D {
         private Vector2 _position = Vector2.Zero;
         private float _zoom = 1f;
