@@ -10,20 +10,22 @@ namespace LD45.Graphics {
         private readonly SpriteBatch _spriteBatch;
 
         private readonly GameWindow _window;
+        private readonly int _scale;
         private RenderTarget2D _renderTarget;
         private bool _boundsUpdatePending = false;
 
         private RendererSettings _settings;
         private RenderTargetBinding[] _defaultTargets;
 
-        public Renderer2D(GraphicsDevice graphicsDevice, GameWindow window) {
+        public Renderer2D(GraphicsDevice graphicsDevice, GameWindow window, int scale) {
             _graphicsDevice = graphicsDevice;
             _spriteBatch = new SpriteBatch(graphicsDevice);
 
             _window = window;
-            _renderTarget = new RenderTarget2D(graphicsDevice, window.ClientBounds.Width, window.ClientBounds.Height);
+            _scale = scale;
 
-            Bounds = window.ClientBounds;
+            Bounds = Scale(window.ClientBounds);
+            _renderTarget = new RenderTarget2D(graphicsDevice, Bounds.Width, Bounds.Height);
 
             window.ClientSizeChanged += Window_ClientSizeChanged;
         }
@@ -59,18 +61,24 @@ namespace LD45.Graphics {
 
             _graphicsDevice.SetRenderTargets(_defaultTargets);
 
-            _spriteBatch.Begin(effect: _settings.LayerEffect);
-            _spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White);
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp, effect: _settings.LayerEffect);
+            _spriteBatch.Draw(_renderTarget, Vector2.Zero, color: Color.White, scale: new Vector2(_scale));
             _spriteBatch.End();
 
             if (_boundsUpdatePending) {
-                Bounds = _window.ClientBounds;
+                Bounds = Scale(_window.ClientBounds);
 
                 _renderTarget.Dispose();
                 _renderTarget = new RenderTarget2D(_graphicsDevice, Bounds.Width, Bounds.Height);
 
                 _boundsUpdatePending = false;
             }
+        }
+
+        private Rectangle Scale(Rectangle bounds) {
+            bounds.Width /= _scale;
+            bounds.Height /= _scale;
+            return bounds;
         }
 
         private void Window_ClientSizeChanged(object sender, EventArgs e) {

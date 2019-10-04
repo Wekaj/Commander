@@ -66,7 +66,7 @@ namespace LD45 {
             AddBindings(_input.Bindings);
             _services.SetService(_input);
 
-            _services.SetService(new Renderer2D(GraphicsDevice, Window));
+            _services.SetService(new Renderer2D(GraphicsDevice, Window, 2));
         }
 
         private void AddBindings(InputBindings bindings) {
