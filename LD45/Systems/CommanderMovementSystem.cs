@@ -21,10 +21,10 @@ namespace LD45.Systems {
                 float distance = Vector2.Distance(bodyComponent.Position, target);
 
                 if (distance > _passingDistance) {
-                    bodyComponent.Force += Vector2.Normalize(target - bodyComponent.Position) * 100f;
+                    bodyComponent.Force += Vector2.Normalize(target - bodyComponent.Position) * 150f;
                 }
                 else if (commanderComponent.Path.Count > 1) {
-                    bodyComponent.Force += Vector2.Normalize(target - bodyComponent.Position) * 100f;
+                    bodyComponent.Force += Vector2.Normalize(target - bodyComponent.Position) * 150f;
 
                     commanderComponent.Path.RemoveAt(0);
                 }

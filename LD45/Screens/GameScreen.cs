@@ -35,7 +35,9 @@ namespace LD45.Screens {
             CreateServiceContainer(services);
 
             _renderer = _screenServices.GetRequiredService<Renderer2D>();
-            _rendererSettings = new RendererSettings();
+            _rendererSettings = new RendererSettings {
+                SamplerState = SamplerState.PointClamp
+            };
             _tileMapRenderer = new TileMapRenderer(_screenServices);
             _squadController = new SquadController(_screenServices);
 
@@ -76,6 +78,7 @@ namespace LD45.Screens {
             _entityWorld.SystemManager.SetSystem(new BodyPhysicsSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BodyTransformSystem(), GameLoopType.Update);
 
+            _entityWorld.SystemManager.SetSystem(new PathDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new SpriteDrawingSystem(services), GameLoopType.Draw);
         }
 
