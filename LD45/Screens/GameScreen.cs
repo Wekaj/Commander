@@ -60,7 +60,7 @@ namespace LD45.Screens {
             CreateCommander(new Vector2(32f, 32f));
             CreateCommander(new Vector2(64f, 32f));
 
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 10; i++) {
                 CreateRecruit(new Vector2(32f + random.NextSingle(256f), 32f + random.NextSingle(256f)));
             }
 

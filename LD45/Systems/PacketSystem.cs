@@ -19,6 +19,10 @@ namespace LD45.Systems {
 
                 unitComponent.Health += packet.HealthChange;
 
+                if (unitComponent.Health > unitComponent.MaxHealth) {
+                    unitComponent.Health = unitComponent.MaxHealth;
+                }
+
                 Entity indicator = EntityWorld.CreateEntity();
                 indicator.AddComponent(new IndicatorComponent {
                     Contents = packet.HealthChange > 0 ? "+" : "" + packet.HealthChange,
@@ -27,6 +31,10 @@ namespace LD45.Systems {
                 indicator.AddComponent(new TransformComponent {
                     Position = transformComponent.Position
                 });
+
+                if (unitComponent.Health <= 0) {
+                    entity.Delete();
+                }
             }
 
             unitComponent.IncomingPackets.Clear();
