@@ -1,4 +1,5 @@
 ﻿using Artemis;
+using LD45.Combat;
 using LD45.Components;
 using Microsoft.Xna.Framework;
 
@@ -17,8 +18,9 @@ namespace LD45.Actions {
             var targetUnitComponent = target.GetComponent<UnitComponent>();
             var targetBodyComponent = target.GetComponent<BodyComponent>();
 
-            float distance = Vector2.Distance(bodyComponent.Position, targetBodyComponent.Position);
+            targetUnitComponent.IncomingPackets.Add(new Packet(unit, -5));
 
+            float distance = Vector2.Distance(bodyComponent.Position, targetBodyComponent.Position);
             if (distance > 0f) {
                 targetBodyComponent.Impulse += (targetBodyComponent.Position - bodyComponent.Position) * _hitForce / distance;
             }

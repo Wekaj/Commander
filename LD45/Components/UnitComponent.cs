@@ -2,11 +2,17 @@
 using Artemis.Interface;
 using LD45.Actions;
 using LD45.AI;
+using LD45.Combat;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
 namespace LD45.Components {
     public sealed class UnitComponent : IComponent {
+        public int MaxHealth { get; set; }
+        public int Health { get; set; }
+
+        public List<Packet> IncomingPackets { get; } = new List<Packet>();
+
         public int Team { get; set; }
 
         public Entity Commander { get; set; } = null;

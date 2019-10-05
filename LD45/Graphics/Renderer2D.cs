@@ -51,9 +51,13 @@ namespace LD45.Graphics {
         }
 
         public void Draw(SpriteFont font, string text, Vector2 position,
-            Color? color = null) {
+            Color? color = null, Vector2? alignment = null) {
 
-            _spriteBatch.DrawString(font, text, position, color ?? Color.White);
+            alignment = alignment ?? Vector2.Zero;
+
+            Vector2 size = font.MeasureString(text);
+
+            _spriteBatch.DrawString(font, text, position - size * alignment.Value, color ?? Color.White);
         }
 
         public void End() {
