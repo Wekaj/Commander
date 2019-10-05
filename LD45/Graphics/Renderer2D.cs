@@ -10,7 +10,6 @@ namespace LD45.Graphics {
         private readonly SpriteBatch _spriteBatch;
 
         private readonly GameWindow _window;
-        private readonly int _scale;
         private RenderTarget2D _renderTarget;
         private bool _boundsUpdatePending = false;
 
@@ -22,14 +21,15 @@ namespace LD45.Graphics {
             _spriteBatch = new SpriteBatch(graphicsDevice);
 
             _window = window;
-            _scale = scale;
+            Scale = scale;
 
-            Bounds = Scale(window.ClientBounds);
+            Bounds = ScaleBounds(window.ClientBounds);
             _renderTarget = new RenderTarget2D(graphicsDevice, Bounds.Width, Bounds.Height);
 
             window.ClientSizeChanged += Window_ClientSizeChanged;
         }
 
+        public int Scale { get; }
         public Rectangle Bounds { get; private set; }
 
         public void Begin(RendererSettings settings = null) {
@@ -62,11 +62,11 @@ namespace LD45.Graphics {
             _graphicsDevice.SetRenderTargets(_defaultTargets);
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, effect: _settings.LayerEffect);
-            _spriteBatch.Draw(_renderTarget, Vector2.Zero, color: Color.White, scale: new Vector2(_scale));
+            _spriteBatch.Draw(_renderTarget, Vector2.Zero, color: Color.White, scale: new Vector2(Scale));
             _spriteBatch.End();
 
             if (_boundsUpdatePending) {
-                Bounds = Scale(_window.ClientBounds);
+                Bounds = ScaleBounds(_window.ClientBounds);
 
                 _renderTarget.Dispose();
                 _renderTarget = new RenderTarget2D(_graphicsDevice, Bounds.Width, Bounds.Height);
@@ -75,9 +75,9 @@ namespace LD45.Graphics {
             }
         }
 
-        private Rectangle Scale(Rectangle bounds) {
-            bounds.Width /= _scale;
-            bounds.Height /= _scale;
+        private Rectangle ScaleBounds(Rectangle bounds) {
+            bounds.Width /= Scale;
+            bounds.Height /= Scale;
             return bounds;
         }
 

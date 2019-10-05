@@ -1,9 +1,11 @@
 ﻿using Artemis;
 using Artemis.Manager;
 using LD45.Components;
+using LD45.Controllers;
 using LD45.Graphics;
 using LD45.Systems;
 using LD45.Tiles;
+using LD45.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -14,9 +16,14 @@ namespace LD45.Screens {
     public sealed class GameScreen : IScreen {
         private readonly EntityWorld _entityWorld = new EntityWorld();
         private readonly TileMap _tileMap = new TileMap(64, 64);
+        private readonly Camera2D _camera = new Camera2D();
+
+        private ServiceContainer _screenServices;
 
         private Renderer2D _renderer;
+        private RendererSettings _rendererSettings;
         private TileMapRenderer _tileMapRenderer;
+        private SquadController _squadController;
 
         private Texture2D _personTexture;
 
@@ -25,11 +32,15 @@ namespace LD45.Screens {
         public event EventHandler PoppedSelf;
 
         public void Initialize(IServiceProvider services) {
-            _renderer = services.GetRequiredService<Renderer2D>();
-            _tileMapRenderer = new TileMapRenderer(services);
+            CreateServiceContainer(services);
 
-            LoadContent(services);
-            InitializeSystems(services);
+            _renderer = _screenServices.GetRequiredService<Renderer2D>();
+            _rendererSettings = new RendererSettings();
+            _tileMapRenderer = new TileMapRenderer(_screenServices);
+            _squadController = new SquadController(_screenServices);
+
+            LoadContent(_screenServices);
+            InitializeSystems(_screenServices);
 
             for (int y = 0; y < _tileMap.Height; y++) {
                 for (int x = 0; x < _tileMap.Width; x++) {
@@ -43,6 +54,15 @@ namespace LD45.Screens {
             person.AddComponent(new SpriteComponent {
                 Texture = _personTexture
             });
+            person.AddComponent(new CommanderComponent());
+        }
+
+        private void CreateServiceContainer(IServiceProvider services) {
+            _screenServices = new ServiceContainer(services);
+
+            _screenServices.SetService(_entityWorld);
+            _screenServices.SetService(_tileMap);
+            _screenServices.SetService(_camera);
         }
 
         private void LoadContent(IServiceProvider services) {
@@ -52,6 +72,7 @@ namespace LD45.Screens {
         }
 
         private void InitializeSystems(IServiceProvider services) {
+            _entityWorld.SystemManager.SetSystem(new CommanderMovementSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BodyPhysicsSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BodyTransformSystem(), GameLoopType.Update);
 
@@ -59,11 +80,14 @@ namespace LD45.Screens {
         }
 
         public void Update(GameTime gameTime) {
+            _squadController.Update();
+
             _entityWorld.Update(gameTime.ElapsedGameTime.Ticks);
         }
 
         public void Draw(GameTime gameTime) {
-            _renderer.Begin();
+            _rendererSettings.TransformMatrix = _camera.GetTransformMatrix();
+            _renderer.Begin(_rendererSettings);
 
             _tileMapRenderer.Draw(_tileMap);
             _entityWorld.Draw();
