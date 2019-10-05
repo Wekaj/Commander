@@ -18,11 +18,14 @@ namespace LD45.Systems {
             if (commanderComponent.Path.Count > 0) {
                 Vector2 target = commanderComponent.Path[0];
 
-                bodyComponent.Force += Vector2.Normalize(target - bodyComponent.Position) * 100f;
-
                 float distance = Vector2.Distance(bodyComponent.Position, target);
 
-                if (distance < _passingDistance) {
+                if (distance > _passingDistance) {
+                    bodyComponent.Force += Vector2.Normalize(target - bodyComponent.Position) * 100f;
+                }
+                else if (commanderComponent.Path.Count > 1) {
+                    bodyComponent.Force += Vector2.Normalize(target - bodyComponent.Position) * 100f;
+
                     commanderComponent.Path.RemoveAt(0);
                 }
             }
