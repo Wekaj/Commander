@@ -19,11 +19,13 @@ namespace LD45.Systems {
 
             foreach (Entity recruitableEntity in EntityWorld.EntityManager.GetEntities(_recruitableAspect)) {
                 var recruitableBodyComponent = recruitableEntity.GetComponent<BodyComponent>();
+                var recruitableUnitComponent = recruitableEntity.GetComponent<UnitComponent>();
 
                 float distance = Vector2.Distance(bodyComponent.Position, recruitableBodyComponent.Position);
 
                 if (distance < _recruitingDistance) {
                     commanderComponent.Squad.Add(recruitableEntity);
+                    recruitableUnitComponent.Commander = entity;
 
                     recruitableEntity.RemoveComponent<RecruitableComponent>();
                 }

@@ -1,5 +1,6 @@
 ﻿using Artemis;
 using Artemis.Manager;
+using LD45.AI;
 using LD45.Components;
 using LD45.Controllers;
 using LD45.Extensions;
@@ -18,6 +19,7 @@ namespace LD45.Screens {
         private readonly EntityWorld _entityWorld = new EntityWorld();
         private readonly TileMap _tileMap = new TileMap(64, 64);
         private readonly Camera2D _camera = new Camera2D();
+        private readonly Random _random = new Random();
 
         private ServiceContainer _screenServices;
 
@@ -26,7 +28,7 @@ namespace LD45.Screens {
         private TileMapRenderer _tileMapRenderer;
         private SquadController _squadController;
 
-        private Texture2D _personTexture;
+        private Texture2D _personTexture, _spiderTexture;
 
         public event ScreenEventHandler PushedScreen;
         public event ScreenEventHandler ReplacedSelf;
@@ -54,43 +56,16 @@ namespace LD45.Screens {
                 }
             }
 
-            Entity person = _entityWorld.CreateEntity();
-            person.AddComponent(new BodyComponent {
-                Position = new Vector2(32f, 32f)
-            });
-            person.AddComponent(new TransformComponent());
-            person.AddComponent(new SpriteComponent {
-                Texture = _personTexture,
-                Origin = new Vector2(4.5f, 11f)
-            });
-            person.AddComponent(new CommanderComponent());
+            CreateCommander(new Vector2(32f, 32f));
+            CreateCommander(new Vector2(64f, 32f));
 
             for (int i = 0; i < 100; i++) {
-                Entity follower = _entityWorld.CreateEntity();
-                follower.AddComponent(new BodyComponent {
-                    Position = new Vector2(32f + random.NextSingle(256f), 32f + random.NextSingle(256f))
-                });
-                follower.AddComponent(new TransformComponent());
-                follower.AddComponent(new SpriteComponent {
-                    Texture = _personTexture,
-                    Origin = new Vector2(4.5f, 11f)
-                });
-                follower.AddComponent(new UnitComponent {
-                    Tendency = random.NextUnitVector() * random.NextSingle(8f)
-                });
-                follower.AddComponent(new RecruitableComponent());
+                CreateRecruit(new Vector2(32f + random.NextSingle(256f), 32f + random.NextSingle(256f)));
             }
 
-            Entity person2 = _entityWorld.CreateEntity();
-            person2.AddComponent(new BodyComponent {
-                Position = new Vector2(64f, 32f)
-            });
-            person2.AddComponent(new TransformComponent());
-            person2.AddComponent(new SpriteComponent {
-                Texture = _personTexture,
-                Origin = new Vector2(4.5f, 11f)
-            });
-            person2.AddComponent(new CommanderComponent());
+            for (int i = 0; i < 10; i++) {
+                CreateSpider(new Vector2(128f) + new Vector2(random.NextSingle(64f), random.NextSingle(64f)));
+            }
         }
 
         private void CreateServiceContainer(IServiceProvider services) {
@@ -105,11 +80,12 @@ namespace LD45.Screens {
             var content = services.GetRequiredService<ContentManager>();
 
             _personTexture = content.Load<Texture2D>("Textures/Person");
+            _spiderTexture = content.Load<Texture2D>("Textures/Spider");
         }
 
         private void InitializeSystems(IServiceProvider services) {
-            _entityWorld.SystemManager.SetSystem(new CommanderMovementSystem(), GameLoopType.Update);
-            _entityWorld.SystemManager.SetSystem(new SquadMovementSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new UnitStrategySystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new SquadRepulsionSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new TileCollisionSystem(services), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BodyPhysicsSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BodyTransformSystem(), GameLoopType.Update);
@@ -133,6 +109,59 @@ namespace LD45.Screens {
             _entityWorld.Draw();
 
             _renderer.End();
+        }
+
+        private Entity CreateUnit(Vector2 position, IUnitStrategy strategy) {
+            Entity unit = _entityWorld.CreateEntity();
+
+            unit.AddComponent(new BodyComponent {
+                Position = position
+            });
+            unit.AddComponent(new TransformComponent());
+            unit.AddComponent(new UnitComponent {
+                Strategy = strategy,
+                Tendency = _random.NextUnitVector() * _random.NextSingle(8f)
+            });
+
+            return unit;
+        }
+
+        private Entity CreateSpider(Vector2 position) {
+            Entity spider = CreateUnit(position, new StandardUnitStrategy());
+
+            spider.AddComponent(new SpriteComponent {
+                Texture = _spiderTexture,
+                Origin = new Vector2(6f, 7f)
+            });
+
+            return spider;
+        }
+
+        private Entity CreatePerson(Vector2 position, IUnitStrategy strategy) {
+            Entity person = CreateUnit(position, strategy);
+
+            person.AddComponent(new SpriteComponent {
+                Texture = _personTexture,
+                Origin = new Vector2(4.5f, 11f)
+            });
+
+            return person;
+        }
+
+        private Entity CreateCommander(Vector2 position) {
+            Entity commander = CreatePerson(position, new CommanderStrategy());
+
+            commander.AddComponent(new CommanderComponent());
+
+            return commander;
+        }
+
+        private Entity CreateRecruit(Vector2 position) {
+            Entity recruit = CreatePerson(position, new StandardUnitStrategy());
+
+            recruit.AddComponent(new RecruitableComponent());
+
+            return recruit;
         }
     }
 }

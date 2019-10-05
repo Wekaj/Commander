@@ -43,6 +43,9 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AI\CommanderStrategy.cs" />
+    <Compile Include="AI\IUnitStrategy.cs" />
+    <Compile Include="AI\StandardUnitStrategy.cs" />
     <Compile Include="Components\BodyComponent.cs" />
     <Compile Include="Components\CommanderComponent.cs" />
     <Compile Include="Components\RecruitableComponent.cs" />
@@ -82,12 +85,12 @@
     <Compile Include="Screens\TitleScreen.cs" />
     <Compile Include="Systems\BodyPhysicsSystem.cs" />
     <Compile Include="Systems\BodyTransformSystem.cs" />
-    <Compile Include="Systems\CommanderMovementSystem.cs" />
     <Compile Include="Systems\PathDrawingSystem.cs" />
     <Compile Include="Systems\RecruitingSystem.cs" />
     <Compile Include="Systems\SpriteDrawingSystem.cs" />
-    <Compile Include="Systems\SquadMovementSystem.cs" />
+    <Compile Include="Systems\SquadRepulsionSystem.cs" />
     <Compile Include="Systems\TileCollisionSystem.cs" />
+    <Compile Include="Systems\UnitStrategySystem.cs" />
     <Compile Include="Tiles\Tile.cs" />
     <Compile Include="Tiles\TileMap.cs" />
     <Compile Include="Tiles\TileTypes.cs" />

@@ -1,19 +1,20 @@
 ﻿using Artemis;
-using Artemis.System;
 using LD45.Components;
 using Microsoft.Xna.Framework;
 
-namespace LD45.Systems {
-    public sealed class CommanderMovementSystem : EntityProcessingSystem {
+namespace LD45.AI {
+    public sealed class CommanderStrategy : IUnitStrategy {
         private const float _passingDistance = 12f;
 
-        public CommanderMovementSystem() 
-            : base(Aspect.All(typeof(CommanderComponent), typeof(BodyComponent))) {
-        }
+        private readonly Aspect _aspect = Aspect.All(typeof(CommanderComponent), typeof(BodyComponent));
 
-        public override void Process(Entity entity) {
-            var commanderComponent = entity.GetComponent<CommanderComponent>();
-            var bodyComponent = entity.GetComponent<BodyComponent>();
+        public void Update(Entity unit) {
+            if (!_aspect.Interests(unit)) {
+                return;
+            }
+
+            var commanderComponent = unit.GetComponent<CommanderComponent>();
+            var bodyComponent = unit.GetComponent<BodyComponent>();
 
             if (commanderComponent.Path.Count > 0) {
                 Vector2 target = commanderComponent.Path[0];
