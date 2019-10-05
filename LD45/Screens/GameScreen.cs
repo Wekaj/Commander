@@ -2,6 +2,7 @@
 using Artemis.Manager;
 using LD45.Components;
 using LD45.Controllers;
+using LD45.Extensions;
 using LD45.Graphics;
 using LD45.Systems;
 using LD45.Tiles;
@@ -61,18 +62,19 @@ namespace LD45.Screens {
             });
             person.AddComponent(new CommanderComponent());
 
+            var random = new Random();
             for (int i = 0; i < 10; i++) {
                 Entity follower = _entityWorld.CreateEntity();
                 follower.AddComponent(new BodyComponent {
-                    Position = new Vector2(32f + i, 64f)
+                    Position = new Vector2(32f + random.NextSingle(256f), 32f + random.NextSingle(256f))
                 });
                 follower.AddComponent(new TransformComponent());
                 follower.AddComponent(new SpriteComponent {
                     Texture = _personTexture,
                     Origin = new Vector2(4.5f, 11f)
                 });
-
-                person.GetComponent<CommanderComponent>().Squad.Add(follower);
+                follower.AddComponent(new UnitComponent());
+                follower.AddComponent(new RecruitableComponent());
             }
 
             Entity person2 = _entityWorld.CreateEntity();
@@ -106,6 +108,7 @@ namespace LD45.Screens {
             _entityWorld.SystemManager.SetSystem(new SquadMovementSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BodyPhysicsSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BodyTransformSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new RecruitingSystem(), GameLoopType.Update);
 
             _entityWorld.SystemManager.SetSystem(new PathDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new SpriteDrawingSystem(services), GameLoopType.Draw);

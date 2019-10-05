@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Components\BodyComponent.cs" />
     <Compile Include="Components\CommanderComponent.cs" />
+    <Compile Include="Components\RecruitableComponent.cs" />
     <Compile Include="Components\SpriteComponent.cs" />
     <Compile Include="Components\TransformComponent.cs" />
     <Compile Include="Components\UnitComponent.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Systems\BodyTransformSystem.cs" />
     <Compile Include="Systems\CommanderMovementSystem.cs" />
     <Compile Include="Systems\PathDrawingSystem.cs" />
+    <Compile Include="Systems\RecruitingSystem.cs" />
     <Compile Include="Systems\SpriteDrawingSystem.cs" />
     <Compile Include="Systems\SquadMovementSystem.cs" />
     <Compile Include="Tiles\Tile.cs" />
