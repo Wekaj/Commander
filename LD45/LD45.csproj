@@ -90,6 +90,7 @@
     <Compile Include="Systems\SpriteDrawingSystem.cs" />
     <Compile Include="Systems\SquadRepulsionSystem.cs" />
     <Compile Include="Systems\TileCollisionSystem.cs" />
+    <Compile Include="Systems\UnitInteractionsSystem.cs" />
     <Compile Include="Systems\UnitStrategySystem.cs" />
     <Compile Include="Tiles\Tile.cs" />
     <Compile Include="Tiles\TileMap.cs" />

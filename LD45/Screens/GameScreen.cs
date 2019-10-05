@@ -84,8 +84,8 @@ namespace LD45.Screens {
         }
 
         private void InitializeSystems(IServiceProvider services) {
+            _entityWorld.SystemManager.SetSystem(new UnitInteractionsSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new UnitStrategySystem(), GameLoopType.Update);
-            _entityWorld.SystemManager.SetSystem(new SquadRepulsionSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new TileCollisionSystem(services), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BodyPhysicsSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BodyTransformSystem(), GameLoopType.Update);
@@ -111,7 +111,7 @@ namespace LD45.Screens {
             _renderer.End();
         }
 
-        private Entity CreateUnit(Vector2 position, IUnitStrategy strategy) {
+        private Entity CreateUnit(Vector2 position, int team, IUnitStrategy strategy) {
             Entity unit = _entityWorld.CreateEntity();
 
             unit.AddComponent(new BodyComponent {
@@ -119,6 +119,7 @@ namespace LD45.Screens {
             });
             unit.AddComponent(new TransformComponent());
             unit.AddComponent(new UnitComponent {
+                Team = team,
                 Strategy = strategy,
                 Tendency = _random.NextUnitVector() * _random.NextSingle(8f)
             });
@@ -127,7 +128,7 @@ namespace LD45.Screens {
         }
 
         private Entity CreateSpider(Vector2 position) {
-            Entity spider = CreateUnit(position, new StandardUnitStrategy());
+            Entity spider = CreateUnit(position, 1, new StandardUnitStrategy());
 
             spider.AddComponent(new SpriteComponent {
                 Texture = _spiderTexture,
@@ -138,7 +139,7 @@ namespace LD45.Screens {
         }
 
         private Entity CreatePerson(Vector2 position, IUnitStrategy strategy) {
-            Entity person = CreateUnit(position, strategy);
+            Entity person = CreateUnit(position, 0, strategy);
 
             person.AddComponent(new SpriteComponent {
                 Texture = _personTexture,

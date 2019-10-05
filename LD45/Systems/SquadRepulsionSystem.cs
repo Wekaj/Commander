@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework;
 
 namespace LD45.Systems {
     public sealed class SquadRepulsionSystem : EntityProcessingSystem {
+        private const float _repulsionDistance = 8f;
+
         public SquadRepulsionSystem() 
             : base(Aspect.All(typeof(CommanderComponent), typeof(BodyComponent))) {
         }
@@ -38,9 +40,8 @@ namespace LD45.Systems {
         private Vector2 CalculateRepulsion(BodyComponent bodyComponent1, BodyComponent bodyComponent2) {
             Vector2 difference = bodyComponent1.Position - bodyComponent2.Position;
             float distance = difference.Length();
-            if (distance > 0f) {
-                float distanceCubed = distance * distance * distance;
-                return difference * 150f / distanceCubed;
+            if (distance > 0f && distance < _repulsionDistance) {
+                return difference * 500f / distance;
             }
             else {
                 return Vector2.Zero;
