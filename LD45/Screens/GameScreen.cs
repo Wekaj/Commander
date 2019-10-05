@@ -61,11 +61,11 @@ namespace LD45.Screens {
             CreateCommander(new Vector2(64f, 32f));
 
             for (int i = 0; i < 10; i++) {
-                CreateRecruit(new Vector2(32f + random.NextSingle(256f), 32f + random.NextSingle(256f)));
+                CreateRecruit(new Vector2(32f + random.NextSingle(128f), 32f + random.NextSingle(128f)));
             }
 
             for (int i = 0; i < 10; i++) {
-                CreateSpider(new Vector2(128f) + new Vector2(random.NextSingle(64f), random.NextSingle(64f)));
+                CreateSpider(new Vector2(256f) + new Vector2(random.NextSingle(64f), random.NextSingle(64f)));
             }
         }
 
@@ -116,7 +116,7 @@ namespace LD45.Screens {
             _renderer.End();
         }
 
-        private Entity CreateUnit(Vector2 position, int team, IUnitStrategy strategy) {
+        private Entity CreateUnit(Vector2 position, int team, IUnitStrategy strategy, IUnitAction action) {
             Entity unit = _entityWorld.CreateEntity();
 
             unit.AddComponent(new BodyComponent {
@@ -128,7 +128,7 @@ namespace LD45.Screens {
                 Health = 100,
                 Team = team,
                 Strategy = strategy,
-                Action = new HitAction(),
+                Action = action,
                 Tendency = _random.NextUnitVector() * _random.NextSingle(8f)
             });
 
@@ -136,7 +136,7 @@ namespace LD45.Screens {
         }
 
         private Entity CreateSpider(Vector2 position) {
-            Entity spider = CreateUnit(position, 1, new StandardUnitStrategy());
+            Entity spider = CreateUnit(position, 1, new StandardUnitStrategy(), new HitAction());
 
             spider.AddComponent(new SpriteComponent {
                 Texture = _spiderTexture,
@@ -147,7 +147,23 @@ namespace LD45.Screens {
         }
 
         private Entity CreatePerson(Vector2 position, IUnitStrategy strategy) {
-            Entity person = CreateUnit(position, 0, strategy);
+            IUnitAction action = null;
+            switch (_random.Next(3)) {
+                case 0: {
+                    action = new HitAction();
+                    break;
+                }
+                case 1: {
+                    action = new ShootAction();
+                    break;
+                }
+                case 2: {
+                    action = new HealAction();
+                    break;
+                }
+            }
+
+            Entity person = CreateUnit(position, 0, strategy, action);
 
             person.AddComponent(new SpriteComponent {
                 Texture = _personTexture,

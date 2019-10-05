@@ -25,7 +25,7 @@ namespace LD45.Systems {
 
                 Entity indicator = EntityWorld.CreateEntity();
                 indicator.AddComponent(new IndicatorComponent {
-                    Contents = packet.HealthChange > 0 ? "+" : "" + packet.HealthChange,
+                    Contents = (packet.HealthChange > 0 ? "+" : "") + packet.HealthChange,
                     Color = packet.HealthChange > 0 ? Color.Green : Color.White,
                 });
                 indicator.AddComponent(new TransformComponent {
