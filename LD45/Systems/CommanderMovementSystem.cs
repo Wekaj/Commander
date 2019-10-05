@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace LD45.Systems {
     public sealed class CommanderMovementSystem : EntityProcessingSystem {
-        private const float _passingDistance = 8f;
+        private const float _passingDistance = 12f;
 
         public CommanderMovementSystem() 
             : base(Aspect.All(typeof(CommanderComponent), typeof(BodyComponent))) {

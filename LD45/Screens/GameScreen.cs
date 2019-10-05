@@ -45,9 +45,12 @@ namespace LD45.Screens {
             LoadContent(_screenServices);
             InitializeSystems(_screenServices);
 
+            var random = new Random();
             for (int y = 0; y < _tileMap.Height; y++) {
                 for (int x = 0; x < _tileMap.Width; x++) {
-                    _tileMap[x, y] = new Tile();
+                    _tileMap[x, y] = new Tile {
+                        Type = random.Next(6) == 0 ? TileType.Rocks : TileType.Plains
+                    };
                 }
             }
 
@@ -62,7 +65,6 @@ namespace LD45.Screens {
             });
             person.AddComponent(new CommanderComponent());
 
-            var random = new Random();
             for (int i = 0; i < 10; i++) {
                 Entity follower = _entityWorld.CreateEntity();
                 follower.AddComponent(new BodyComponent {
@@ -108,6 +110,7 @@ namespace LD45.Screens {
         private void InitializeSystems(IServiceProvider services) {
             _entityWorld.SystemManager.SetSystem(new CommanderMovementSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new SquadMovementSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new TileCollisionSystem(services), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BodyPhysicsSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BodyTransformSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new RecruitingSystem(), GameLoopType.Update);

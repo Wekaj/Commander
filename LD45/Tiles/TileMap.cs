@@ -16,5 +16,9 @@
 
         public int Width { get; }
         public int Height { get; }
+
+        public bool IsWithinBounds(int x, int y) {
+            return x >= 0 && y >= 0 && x < Width && y < Height;
+        }
     }
 }

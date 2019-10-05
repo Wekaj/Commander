@@ -70,8 +70,6 @@ namespace LD45.Systems {
 
                 distance += _dotSpacing;
             }
-
-            distance -= finalDistance;
         }
     }
 }

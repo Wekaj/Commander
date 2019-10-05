@@ -26,7 +26,13 @@ namespace LD45.Graphics {
         public void Draw(TileMap tileMap) {
             for (int y = 0; y < tileMap.Height; y++) {
                 for (int x = 0; x < tileMap.Width; x++) {
-                    _renderer.Draw(_tilesTexture, new Vector2(x * Constants.TileSize, y * Constants.TileSize));
+                    int texture = tileMap[x, y].Type.GetTexture();
+
+                    int textureX = texture % 8;
+                    int textureY = texture / 8;
+
+                    _renderer.Draw(_tilesTexture, new Vector2(x * Constants.TileSize, y * Constants.TileSize), 
+                        sourceRectangle: new Rectangle(textureX * Constants.TileSize, textureY * Constants.TileSize, Constants.TileSize, Constants.TileSize));
                 }
             }
         }

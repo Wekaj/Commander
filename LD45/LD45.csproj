@@ -87,8 +87,10 @@
     <Compile Include="Systems\RecruitingSystem.cs" />
     <Compile Include="Systems\SpriteDrawingSystem.cs" />
     <Compile Include="Systems\SquadMovementSystem.cs" />
+    <Compile Include="Systems\TileCollisionSystem.cs" />
     <Compile Include="Tiles\Tile.cs" />
     <Compile Include="Tiles\TileMap.cs" />
+    <Compile Include="Tiles\TileTypes.cs" />
     <Compile Include="Utilities\IServiceContainer.cs" />
     <Compile Include="Utilities\ServiceContainer.cs" />
   </ItemGroup>
