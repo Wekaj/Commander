@@ -23,11 +23,14 @@ namespace LD45.Systems {
                     Entity followerEntity = commanderComponent.Squad[i];
 
                     var followerBodyComponent = followerEntity.GetComponent<BodyComponent>();
+                    var followerUnitComponent = followerEntity.GetComponent<UnitComponent>();
 
-                    float targetDistance = Vector2.Distance(followerBodyComponent.Position, target);
+                    Vector2 followerTarget = target + followerUnitComponent.Tendency;
+
+                    float targetDistance = Vector2.Distance(followerBodyComponent.Position, followerTarget);
 
                     if (targetDistance > _passingDistance) {
-                        followerBodyComponent.Force += Vector2.Normalize(target - followerBodyComponent.Position) * 150f;
+                        followerBodyComponent.Force += Vector2.Normalize(followerTarget - followerBodyComponent.Position) * 150f;
                     }
 
                     Vector2 commanderRepulsionForce = CalculateRepulsion(followerBodyComponent, bodyComponent);

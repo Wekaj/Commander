@@ -43,5 +43,11 @@ namespace LD45.Extensions {
 
             return random.NextSingle(minAngle, maxAngle);
         }
+
+        public static Vector2 NextUnitVector(this Random random) {
+            float angle = random.NextAngle();
+
+            return new Vector2((float)Math.Sin(angle), (float)Math.Cos(angle));
+        }
     }
 }

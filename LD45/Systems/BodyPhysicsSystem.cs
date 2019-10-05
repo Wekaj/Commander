@@ -27,12 +27,7 @@ namespace LD45.Systems {
 
             bodyComponent.Velocity += acceleration;
 
-            bodyComponent.Position += bodyComponent.Velocity * _deltaTime;
-
             bool applyFriction = totalForce == Vector2.Zero;
-
-            bodyComponent.Impulse = Vector2.Zero;
-            bodyComponent.Force = Vector2.Zero;
 
             float speed = bodyComponent.Velocity.Length();
             if (speed > 0f) {
@@ -40,6 +35,11 @@ namespace LD45.Systems {
 
                 bodyComponent.Velocity = bodyComponent.Velocity * newSpeed / speed;
             }
+
+            bodyComponent.Position += bodyComponent.Velocity * _deltaTime;
+
+            bodyComponent.Impulse = Vector2.Zero;
+            bodyComponent.Force = Vector2.Zero;
         }
     }
 }

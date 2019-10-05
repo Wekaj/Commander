@@ -73,7 +73,9 @@ namespace LD45.Screens {
                     Texture = _personTexture,
                     Origin = new Vector2(4.5f, 11f)
                 });
-                follower.AddComponent(new UnitComponent());
+                follower.AddComponent(new UnitComponent {
+                    Tendency = random.NextUnitVector() * random.NextSingle(8f)
+                });
                 follower.AddComponent(new RecruitableComponent());
             }
 
