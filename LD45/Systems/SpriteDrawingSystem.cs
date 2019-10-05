@@ -19,7 +19,7 @@ namespace LD45.Systems {
             var spriteComponent = entity.GetComponent<SpriteComponent>();
             var transformComponent = entity.GetComponent<TransformComponent>();
 
-            _renderer.Draw(spriteComponent.Texture, transformComponent.Position);
+            _renderer.Draw(spriteComponent.Texture, transformComponent.Position, origin: spriteComponent.Origin);
         }
     }
 }

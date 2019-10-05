@@ -54,7 +54,8 @@ namespace LD45.Screens {
             person.AddComponent(new BodyComponent());
             person.AddComponent(new TransformComponent());
             person.AddComponent(new SpriteComponent {
-                Texture = _personTexture
+                Texture = _personTexture,
+                Origin = new Vector2(4.5f, 11f)
             });
             person.AddComponent(new CommanderComponent());
         }

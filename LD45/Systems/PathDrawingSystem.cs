@@ -3,6 +3,7 @@ using Artemis.System;
 using LD45.Components;
 using LD45.Graphics;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -31,7 +32,7 @@ namespace LD45.Systems {
             var commanderComponent = entity.GetComponent<CommanderComponent>();
 
             for (int i = 0; i < commanderComponent.Path.Count; i++) {
-                _renderer.Draw(_dotTexture, commanderComponent.Path[i]);
+                _renderer.Draw(_dotTexture, commanderComponent.Path[i], origin: new Vector2(2f));
             }
         }
     }
