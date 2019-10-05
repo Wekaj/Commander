@@ -33,7 +33,8 @@ namespace LD45.Systems {
             var spriteComponent = entity.GetComponent<SpriteComponent>();
             var transformComponent = entity.GetComponent<TransformComponent>();
 
-            _renderer.Draw(spriteComponent.Texture, transformComponent.Position, origin: spriteComponent.Origin);
+            _renderer.Draw(spriteComponent.Texture, transformComponent.Position, 
+                sourceRectangle: spriteComponent.SourceRectangle, origin: spriteComponent.Origin, color: spriteComponent.Color);
         }
 
         protected override void End() {
@@ -45,6 +46,10 @@ namespace LD45.Systems {
         private int CompareEntities(Entity entity1, Entity entity2) {
             var transformComponent1 = entity1.GetComponent<TransformComponent>();
             var transformComponent2 = entity2.GetComponent<TransformComponent>();
+
+            if (transformComponent1.Position.Y == transformComponent2.Position.Y) {
+                return 1;
+            }
 
             return transformComponent1.Position.Y.CompareTo(transformComponent2.Position.Y);
         }

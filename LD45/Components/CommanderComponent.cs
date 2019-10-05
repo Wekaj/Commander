@@ -12,5 +12,7 @@ namespace LD45.Components {
         public List<Entity> Squad { get; } = new List<Entity>();
 
         public IWeapon Weapon { get; set; } = null;
+
+        public Color FlagColor { get; set; } = Color.White;
     }
 }

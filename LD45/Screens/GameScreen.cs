@@ -30,7 +30,8 @@ namespace LD45.Screens {
         private TileMapRenderer _tileMapRenderer;
         private SquadController _squadController;
 
-        private Texture2D _personTexture, _spiderTexture, _swordIconTexture;
+        private Texture2D _personTexture, _spiderTexture, _swordIconTexture,
+            _flagPoleTexture, _flagTexture;
 
         public event ScreenEventHandler PushedScreen;
         public event ScreenEventHandler ReplacedSelf;
@@ -58,8 +59,8 @@ namespace LD45.Screens {
                 }
             }
 
-            CreateCommander(new Vector2(32f, 32f), new Weapon { Action = new HitAction(), Icon = _swordIconTexture });
-            CreateCommander(new Vector2(64f, 32f), new Weapon { Action = new ShootAction(), Icon = _swordIconTexture });
+            CreateCommander(new Vector2(32f, 32f), new Weapon { Action = new HitAction(), Icon = _swordIconTexture }, Color.Green);
+            CreateCommander(new Vector2(64f, 32f), new Weapon { Action = new ShootAction(), Icon = _swordIconTexture }, Color.Red);
 
             for (int i = 0; i < 10; i++) {
                 CreateRecruit(new Vector2(32f + random.NextSingle(128f), 32f + random.NextSingle(128f)));
@@ -86,6 +87,8 @@ namespace LD45.Screens {
             _personTexture = content.Load<Texture2D>("Textures/Person");
             _spiderTexture = content.Load<Texture2D>("Textures/Spider");
             _swordIconTexture = content.Load<Texture2D>("Textures/SwordIcon");
+            _flagPoleTexture = content.Load<Texture2D>("Textures/FlagPole");
+            _flagTexture = content.Load<Texture2D>("Textures/Flag");
         }
 
         private void InitializeSystems(IServiceProvider services) {
@@ -103,6 +106,8 @@ namespace LD45.Screens {
             _entityWorld.SystemManager.SetSystem(new IndicatorAnimatingSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new CommanderAnimatingSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new CommanderWeaponSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new LinkSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new AnimationSystem(), GameLoopType.Update);
 
             _entityWorld.SystemManager.SetSystem(new ShadowDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new PathDrawingSystem(services), GameLoopType.Draw);
@@ -171,11 +176,38 @@ namespace LD45.Screens {
             return person;
         }
 
-        private Entity CreateCommander(Vector2 position, IWeapon weapon) {
+        private Entity CreateCommander(Vector2 position, IWeapon weapon, Color flagColor) {
             Entity commander = CreatePerson(position, new CommanderStrategy());
 
             commander.AddComponent(new CommanderComponent {
-                Weapon = weapon
+                Weapon = weapon,
+                FlagColor = flagColor,
+            });
+
+            Entity flagPole = _entityWorld.CreateEntity();
+            flagPole.AddComponent(new TransformComponent());
+            flagPole.AddComponent(new SpriteComponent {
+                Texture = _flagPoleTexture,
+                Origin = new Vector2(15.5f, 26f),
+            });
+            flagPole.AddComponent(new LinkComponent {
+                Parent = commander,
+                Offset = new Vector2(0f, -0.001f),
+            });
+
+            Entity flag = _entityWorld.CreateEntity();
+            flag.AddComponent(new TransformComponent());
+            flag.AddComponent(new SpriteComponent {
+                Texture = _flagTexture,
+                Origin = new Vector2(15.5f, 26f),
+                Color = flagColor,
+            });
+            flag.AddComponent(new LinkComponent {
+                Parent = commander,
+                Offset = new Vector2(0f, -0.002f),
+            });
+            flag.AddComponent(new AnimationComponent {
+                Animation = new Animation(_flagTexture, 4, 0.1f)
             });
 
             return commander;
