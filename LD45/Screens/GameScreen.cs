@@ -104,6 +104,7 @@ namespace LD45.Screens {
             _entityWorld.SystemManager.SetSystem(new CommanderAnimatingSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new CommanderWeaponSystem(), GameLoopType.Update);
 
+            _entityWorld.SystemManager.SetSystem(new ShadowDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new PathDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new SpriteDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new ParticleDrawingSystem(services), GameLoopType.Draw);
@@ -141,6 +142,9 @@ namespace LD45.Screens {
                 Action = action,
                 Tendency = _random.NextUnitVector() * _random.NextSingle(8f)
             });
+            unit.AddComponent(new ShadowComponent {
+                Type = ShadowType.Small
+            });
 
             return unit;
         }
@@ -150,7 +154,7 @@ namespace LD45.Screens {
 
             spider.AddComponent(new SpriteComponent {
                 Texture = _spiderTexture,
-                Origin = new Vector2(6f, 7f)
+                Origin = new Vector2(6f, 8f)
             });
 
             return spider;
@@ -197,7 +201,10 @@ namespace LD45.Screens {
             });
             weaponEntity.AddComponent(new SpriteComponent {
                 Texture = weapon.Icon,
-                Origin = new Vector2(weapon.Icon.Width / 2f, weapon.Icon.Height / 2f)
+                Origin = new Vector2(weapon.Icon.Width / 2f, weapon.Icon.Height)
+            });
+            weaponEntity.AddComponent(new ShadowComponent {
+                Type = ShadowType.Small
             });
 
             return weaponEntity;

@@ -56,6 +56,7 @@
     <Compile Include="Components\IndicatorComponent.cs" />
     <Compile Include="Components\ParticleComponent.cs" />
     <Compile Include="Components\RecruitableComponent.cs" />
+    <Compile Include="Components\ShadowComponent.cs" />
     <Compile Include="Components\SpriteComponent.cs" />
     <Compile Include="Components\TransformComponent.cs" />
     <Compile Include="Components\UnitComponent.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Systems\PathDrawingSystem.cs" />
     <Compile Include="Systems\RecruitingSystem.cs" />
     <Compile Include="Systems\ParticleDrawingSystem.cs" />
+    <Compile Include="Systems\ShadowDrawingSystem.cs" />
     <Compile Include="Systems\SpriteDrawingSystem.cs" />
     <Compile Include="Systems\TileCollisionSystem.cs" />
     <Compile Include="Systems\UnitActionSystem.cs" />
