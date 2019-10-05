@@ -8,6 +8,7 @@ namespace LD45.Components {
         public Vector2 Velocity { get; set; }
         public Vector2 Force { get; set; }
         public Vector2 Impulse { get; set; }
-        public float Friction { get; set; } = 0.05f;
+        public float Friction { get; set; } = 2f;
+        public float MaxVelocity { get; set; } = 50f;
     }
 }
