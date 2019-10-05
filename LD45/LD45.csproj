@@ -93,6 +93,7 @@
     <Compile Include="Systems\BodyPhysicsSystem.cs" />
     <Compile Include="Systems\BodyTransformSystem.cs" />
     <Compile Include="Systems\CommanderAnimatingSystem.cs" />
+    <Compile Include="Systems\CommanderWeaponSystem.cs" />
     <Compile Include="Systems\IndicatorDrawingSystem.cs" />
     <Compile Include="Systems\IndicatorAnimatingSystem.cs" />
     <Compile Include="Systems\PacketSystem.cs" />
@@ -112,6 +113,8 @@
     <Compile Include="Utilities\IServiceContainer.cs" />
     <Compile Include="Utilities\MathUtilities.cs" />
     <Compile Include="Utilities\ServiceContainer.cs" />
+    <Compile Include="Weapons\IWeapon.cs" />
+    <Compile Include="Weapons\Weapon.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="artemis, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">

@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework;
 
 namespace LD45.Systems {
     public sealed class PacketSystem : EntityProcessingSystem {
+        private readonly Aspect _commanderAspect = Aspect.All(typeof(CommanderComponent));
+        private readonly Aspect _unitAspect = Aspect.All(typeof(UnitComponent));
+
         public PacketSystem() 
             : base(Aspect.All(typeof(UnitComponent), typeof(TransformComponent))) {
         }
@@ -33,11 +36,34 @@ namespace LD45.Systems {
                 });
 
                 if (unitComponent.Health <= 0) {
-                    entity.Delete();
+                    Kill(entity);
                 }
             }
 
             unitComponent.IncomingPackets.Clear();
+        }
+
+        private void Kill(Entity entity) {
+            if (_commanderAspect.Interests(entity)) {
+                var commanderComponent = entity.GetComponent<CommanderComponent>();
+
+                for (int i = 0; i < commanderComponent.Squad.Count; i++) {
+                    var followerUnitComponent = commanderComponent.Squad[i].GetComponent<UnitComponent>();
+
+                    followerUnitComponent.Commander = null;
+                }
+            }
+            else if (_unitAspect.Interests(entity)) {
+                var unitComponent = entity.GetComponent<UnitComponent>();
+
+                if (unitComponent.Commander != null) {
+                    var commanderComponent = unitComponent.Commander.GetComponent<CommanderComponent>();
+
+                    commanderComponent.Squad.Remove(entity);
+                }
+            }
+
+            entity.Delete();
         }
     }
 }

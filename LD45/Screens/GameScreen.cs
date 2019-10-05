@@ -9,6 +9,7 @@ using LD45.Graphics;
 using LD45.Systems;
 using LD45.Tiles;
 using LD45.Utilities;
+using LD45.Weapons;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -57,8 +58,8 @@ namespace LD45.Screens {
                 }
             }
 
-            CreateCommander(new Vector2(32f, 32f));
-            CreateCommander(new Vector2(64f, 32f));
+            CreateCommander(new Vector2(32f, 32f), new Weapon { Action = new HitAction() });
+            CreateCommander(new Vector2(64f, 32f), new Weapon { Action = new ShootAction() });
 
             for (int i = 0; i < 10; i++) {
                 CreateRecruit(new Vector2(32f + random.NextSingle(128f), 32f + random.NextSingle(128f)));
@@ -97,6 +98,7 @@ namespace LD45.Screens {
             _entityWorld.SystemManager.SetSystem(new ParticleAnimatingSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new IndicatorAnimatingSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new CommanderAnimatingSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new CommanderWeaponSystem(), GameLoopType.Update);
 
             _entityWorld.SystemManager.SetSystem(new PathDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new SpriteDrawingSystem(services), GameLoopType.Draw);
@@ -151,23 +153,7 @@ namespace LD45.Screens {
         }
 
         private Entity CreatePerson(Vector2 position, IUnitStrategy strategy) {
-            IUnitAction action = null;
-            switch (_random.Next(3)) {
-                case 0: {
-                    action = new HitAction();
-                    break;
-                }
-                case 1: {
-                    action = new ShootAction();
-                    break;
-                }
-                case 2: {
-                    action = new HealAction();
-                    break;
-                }
-            }
-
-            Entity person = CreateUnit(position, 0, strategy, action);
+            Entity person = CreateUnit(position, 0, strategy, null);
 
             person.AddComponent(new SpriteComponent {
                 Texture = _personTexture,
@@ -177,10 +163,12 @@ namespace LD45.Screens {
             return person;
         }
 
-        private Entity CreateCommander(Vector2 position) {
+        private Entity CreateCommander(Vector2 position, IWeapon weapon) {
             Entity commander = CreatePerson(position, new CommanderStrategy());
 
-            commander.AddComponent(new CommanderComponent());
+            commander.AddComponent(new CommanderComponent {
+                Weapon = weapon
+            });
 
             return commander;
         }
