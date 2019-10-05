@@ -92,6 +92,7 @@
     <Compile Include="Screens\TitleScreen.cs" />
     <Compile Include="Systems\BodyPhysicsSystem.cs" />
     <Compile Include="Systems\BodyTransformSystem.cs" />
+    <Compile Include="Systems\CommanderAnimatingSystem.cs" />
     <Compile Include="Systems\IndicatorDrawingSystem.cs" />
     <Compile Include="Systems\IndicatorAnimatingSystem.cs" />
     <Compile Include="Systems\PacketSystem.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Tiles\TileMap.cs" />
     <Compile Include="Tiles\TileTypes.cs" />
     <Compile Include="Utilities\IServiceContainer.cs" />
+    <Compile Include="Utilities\MathUtilities.cs" />
     <Compile Include="Utilities\ServiceContainer.cs" />
   </ItemGroup>
   <ItemGroup>

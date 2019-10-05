@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LD45.Utilities;
+using Microsoft.Xna.Framework;
 using System;
 
 namespace LD45.Extensions {
@@ -47,7 +48,7 @@ namespace LD45.Extensions {
         public static Vector2 NextUnitVector(this Random random) {
             float angle = random.NextAngle();
 
-            return new Vector2((float)Math.Sin(angle), (float)Math.Cos(angle));
+            return MathUtilities.VectorFromAngle(angle);
         }
     }
 }
