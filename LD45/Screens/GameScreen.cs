@@ -65,7 +65,7 @@ namespace LD45.Screens {
             });
             person.AddComponent(new CommanderComponent());
 
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 100; i++) {
                 Entity follower = _entityWorld.CreateEntity();
                 follower.AddComponent(new BodyComponent {
                     Position = new Vector2(32f + random.NextSingle(256f), 32f + random.NextSingle(256f))
