@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace LD45.Controllers {
     public sealed class SquadController {
-        private const float _selectionRadius = 16f;
+        private const float _selectionRadius = 32f;
         private const float _minNodeDistance = 2f;
 
         private readonly Aspect _commanderAspect = Aspect.All(typeof(CommanderComponent), typeof(BodyComponent));

@@ -51,13 +51,26 @@ namespace LD45.Screens {
             }
 
             Entity person = _entityWorld.CreateEntity();
-            person.AddComponent(new BodyComponent());
+            person.AddComponent(new BodyComponent {
+                Position = new Vector2(32f, 32f)
+            });
             person.AddComponent(new TransformComponent());
             person.AddComponent(new SpriteComponent {
                 Texture = _personTexture,
                 Origin = new Vector2(4.5f, 11f)
             });
             person.AddComponent(new CommanderComponent());
+
+            Entity person2 = _entityWorld.CreateEntity();
+            person2.AddComponent(new BodyComponent {
+                Position = new Vector2(64f, 32f)
+            });
+            person2.AddComponent(new TransformComponent());
+            person2.AddComponent(new SpriteComponent {
+                Texture = _personTexture,
+                Origin = new Vector2(4.5f, 11f)
+            });
+            person2.AddComponent(new CommanderComponent());
         }
 
         private void CreateServiceContainer(IServiceProvider services) {
