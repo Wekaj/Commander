@@ -22,7 +22,7 @@ namespace LD45.Systems {
 
         private readonly Renderer2D _renderer;
 
-        private Texture2D _dotTexture, _arrowTexture, _ringTexture, _fullRingTexture;
+        private Texture2D _dotTexture;
 
         public PathDrawingSystem(IServiceProvider services) 
             : base(Aspect.All(typeof(CommanderComponent), typeof(TransformComponent))) {
@@ -36,9 +36,6 @@ namespace LD45.Systems {
             var content = services.GetRequiredService<ContentManager>();
 
             _dotTexture = content.Load<Texture2D>("Textures/Dot");
-            _arrowTexture = content.Load<Texture2D>("Textures/Arrow");
-            _ringTexture = content.Load<Texture2D>("Textures/Ring");
-            _fullRingTexture = content.Load<Texture2D>("Textures/FullRing");
         }
 
         public override void Process(Entity entity) {
@@ -78,12 +75,7 @@ namespace LD45.Systems {
                     float endDistanceSqr = Vector2.DistanceSquared(dotPosition, end);
 
                     if (endDistanceSqr > _ringRadiusSqr) {
-                        if (distance == 0f) {
-                            _renderer.Draw(_arrowTexture, dotPosition, origin: new Vector2(5f), rotation: (float)Math.PI + direction.GetAngle());
-                        }
-                        else {
-                            _renderer.Draw(_dotTexture, dotPosition, origin: new Vector2(2f));
-                        }
+                        _renderer.Draw(_dotTexture, dotPosition, origin: new Vector2(2f));
                     }
 
                     distance += _dotSpacing;

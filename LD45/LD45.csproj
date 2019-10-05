@@ -59,6 +59,7 @@
     <Compile Include="Components\SpriteComponent.cs" />
     <Compile Include="Components\TransformComponent.cs" />
     <Compile Include="Components\UnitComponent.cs" />
+    <Compile Include="Components\WeaponComponent.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\SquadController.cs" />
     <Compile Include="Extensions\ICollectionExtensions.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Systems\UnitCooldownSystem.cs" />
     <Compile Include="Systems\UnitInteractionsSystem.cs" />
     <Compile Include="Systems\UnitStrategySystem.cs" />
+    <Compile Include="Systems\WeaponPickupSystem.cs" />
     <Compile Include="Tiles\Tile.cs" />
     <Compile Include="Tiles\TileMap.cs" />
     <Compile Include="Tiles\TileTypes.cs" />

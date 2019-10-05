@@ -30,7 +30,7 @@ namespace LD45.Screens {
         private TileMapRenderer _tileMapRenderer;
         private SquadController _squadController;
 
-        private Texture2D _personTexture, _spiderTexture;
+        private Texture2D _personTexture, _spiderTexture, _swordIconTexture;
 
         public event ScreenEventHandler PushedScreen;
         public event ScreenEventHandler ReplacedSelf;
@@ -58,8 +58,8 @@ namespace LD45.Screens {
                 }
             }
 
-            CreateCommander(new Vector2(32f, 32f), new Weapon { Action = new HitAction() });
-            CreateCommander(new Vector2(64f, 32f), new Weapon { Action = new ShootAction() });
+            CreateCommander(new Vector2(32f, 32f), new Weapon { Action = new HitAction(), Icon = _swordIconTexture });
+            CreateCommander(new Vector2(64f, 32f), new Weapon { Action = new ShootAction(), Icon = _swordIconTexture });
 
             for (int i = 0; i < 10; i++) {
                 CreateRecruit(new Vector2(32f + random.NextSingle(128f), 32f + random.NextSingle(128f)));
@@ -68,6 +68,8 @@ namespace LD45.Screens {
             for (int i = 0; i < 10; i++) {
                 CreateSpider(new Vector2(256f) + new Vector2(random.NextSingle(64f), random.NextSingle(64f)));
             }
+
+            CreateWeapon(new Vector2(128f, 128f), new Weapon { Action = new HitAction(), Icon = _swordIconTexture });
         }
 
         private void CreateServiceContainer(IServiceProvider services) {
@@ -83,6 +85,7 @@ namespace LD45.Screens {
 
             _personTexture = content.Load<Texture2D>("Textures/Person");
             _spiderTexture = content.Load<Texture2D>("Textures/Spider");
+            _swordIconTexture = content.Load<Texture2D>("Textures/SwordIcon");
         }
 
         private void InitializeSystems(IServiceProvider services) {
@@ -92,6 +95,7 @@ namespace LD45.Screens {
             _entityWorld.SystemManager.SetSystem(new BodyPhysicsSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BodyTransformSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new RecruitingSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new WeaponPickupSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new UnitActionSystem(services), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new UnitCooldownSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new PacketSystem(), GameLoopType.Update);
@@ -179,6 +183,24 @@ namespace LD45.Screens {
             recruit.AddComponent(new RecruitableComponent());
 
             return recruit;
+        }
+
+        private Entity CreateWeapon(Vector2 position, IWeapon weapon) {
+            Entity weaponEntity = _entityWorld.CreateEntity();
+
+            weaponEntity.AddComponent(new BodyComponent {
+                Position = position
+            });
+            weaponEntity.AddComponent(new TransformComponent());
+            weaponEntity.AddComponent(new WeaponComponent {
+                Weapon = weapon
+            });
+            weaponEntity.AddComponent(new SpriteComponent {
+                Texture = weapon.Icon,
+                Origin = new Vector2(weapon.Icon.Width / 2f, weapon.Icon.Height / 2f)
+            });
+
+            return weaponEntity;
         }
     }
 }
