@@ -43,6 +43,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Actions\HitAction.cs" />
+    <Compile Include="Actions\IUnitAction.cs" />
     <Compile Include="AI\CommanderStrategy.cs" />
     <Compile Include="AI\IUnitStrategy.cs" />
     <Compile Include="AI\StandardUnitStrategy.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="Systems\SpriteDrawingSystem.cs" />
     <Compile Include="Systems\SquadRepulsionSystem.cs" />
     <Compile Include="Systems\TileCollisionSystem.cs" />
+    <Compile Include="Systems\UnitCooldownSystem.cs" />
     <Compile Include="Systems\UnitInteractionsSystem.cs" />
     <Compile Include="Systems\UnitStrategySystem.cs" />
     <Compile Include="Tiles\Tile.cs" />

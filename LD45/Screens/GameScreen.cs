@@ -1,5 +1,6 @@
 ﻿using Artemis;
 using Artemis.Manager;
+using LD45.Actions;
 using LD45.AI;
 using LD45.Components;
 using LD45.Controllers;
@@ -90,6 +91,7 @@ namespace LD45.Screens {
             _entityWorld.SystemManager.SetSystem(new BodyPhysicsSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BodyTransformSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new RecruitingSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new UnitCooldownSystem(), GameLoopType.Update);
 
             _entityWorld.SystemManager.SetSystem(new PathDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new SpriteDrawingSystem(services), GameLoopType.Draw);
@@ -121,6 +123,7 @@ namespace LD45.Screens {
             unit.AddComponent(new UnitComponent {
                 Team = team,
                 Strategy = strategy,
+                Action = new HitAction(),
                 Tendency = _random.NextUnitVector() * _random.NextSingle(8f)
             });
 

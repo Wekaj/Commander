@@ -27,41 +27,51 @@ namespace LD45.AI {
                 }
             }
 
-            float CalculateScore(Entity target) {
-                var targetUnitComponent = target.GetComponent<UnitComponent>();
-                var targetBodyComponent = target.GetComponent<BodyComponent>();
+            if (unitComponent.Action != null) {
+                float CalculateScore(Entity target) {
+                    var targetUnitComponent = target.GetComponent<UnitComponent>();
+                    var targetBodyComponent = target.GetComponent<BodyComponent>();
 
-                float distance = Vector2.Distance(bodyComponent.Position, targetBodyComponent.Position);
+                    float distance = Vector2.Distance(bodyComponent.Position, targetBodyComponent.Position);
 
-                float score = 1000f;
+                    float score = 1000f;
 
-                score -= distance * unitComponent.DistanceWeight;
+                    score -= distance * unitComponent.DistanceWeight;
 
-                if (targetUnitComponent.Team == unitComponent.Team) {
-                    score = float.NegativeInfinity;
-                }
-
-                if (squadPosition != null) {
-                    float squadDistance = Vector2.Distance(squadPosition.Value, targetBodyComponent.Position);
-
-                    if (squadDistance > _actionRadius) {
+                    if (targetUnitComponent.Team == unitComponent.Team && !unitComponent.Action.TargetsAllies) {
                         score = float.NegativeInfinity;
                     }
+
+                    if (squadPosition != null) {
+                        float distanceToSquad = Vector2.Distance(squadPosition.Value, targetBodyComponent.Position);
+
+                        if (distanceToSquad > _actionRadius + unitComponent.Action.Range) {
+                            score = float.NegativeInfinity;
+                        }
+                    }
+
+                    return score;
                 }
 
-                return score;
-            }
+                Entity chosenTarget = unitComponent.VisibleUnits.OrderByDescending(CalculateScore).FirstOrDefault();
 
-            Entity chosenTarget = unitComponent.VisibleUnits.OrderByDescending(CalculateScore).FirstOrDefault();
+                if (chosenTarget != null) {
+                    var targetUnitComponent = chosenTarget.GetComponent<UnitComponent>();
+                    var targetBodyComponent = chosenTarget.GetComponent<BodyComponent>();
 
-            if (chosenTarget != null) {
-                var targetUnitComponent = chosenTarget.GetComponent<UnitComponent>();
-                var targetBodyComponent = chosenTarget.GetComponent<BodyComponent>();
+                    if (CalculateScore(chosenTarget) >= 0f) {
+                        float distance = Vector2.Distance(targetBodyComponent.Position, bodyComponent.Position);
 
-                if (CalculateScore(chosenTarget) >= 0f) {
-                    bodyComponent.Force += Vector2.Normalize(targetBodyComponent.Position - bodyComponent.Position) * 150f;
+                        if (distance > unitComponent.Action.Range) {
+                            bodyComponent.Force += Vector2.Normalize(targetBodyComponent.Position - bodyComponent.Position) * 150f;
+                        }
+                        else if (unitComponent.CooldownTimer <= 0f) {
+                            unitComponent.Action.Perform(unit, chosenTarget);
+                            unitComponent.CooldownTimer += unitComponent.Action.Cooldown;
+                        }
 
-                    return;
+                        return;
+                    }
                 }
             }
 
