@@ -47,6 +47,7 @@
     <Compile Include="Components\CommanderComponent.cs" />
     <Compile Include="Components\SpriteComponent.cs" />
     <Compile Include="Components\TransformComponent.cs" />
+    <Compile Include="Components\UnitComponent.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\SquadController.cs" />
     <Compile Include="Extensions\ICollectionExtensions.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Systems\CommanderMovementSystem.cs" />
     <Compile Include="Systems\PathDrawingSystem.cs" />
     <Compile Include="Systems\SpriteDrawingSystem.cs" />
+    <Compile Include="Systems\SquadMovementSystem.cs" />
     <Compile Include="Tiles\Tile.cs" />
     <Compile Include="Tiles\TileMap.cs" />
     <Compile Include="Utilities\IServiceContainer.cs" />

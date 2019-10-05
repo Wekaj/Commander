@@ -61,6 +61,20 @@ namespace LD45.Screens {
             });
             person.AddComponent(new CommanderComponent());
 
+            for (int i = 0; i < 10; i++) {
+                Entity follower = _entityWorld.CreateEntity();
+                follower.AddComponent(new BodyComponent {
+                    Position = new Vector2(32f + i, 64f)
+                });
+                follower.AddComponent(new TransformComponent());
+                follower.AddComponent(new SpriteComponent {
+                    Texture = _personTexture,
+                    Origin = new Vector2(4.5f, 11f)
+                });
+
+                person.GetComponent<CommanderComponent>().Squad.Add(follower);
+            }
+
             Entity person2 = _entityWorld.CreateEntity();
             person2.AddComponent(new BodyComponent {
                 Position = new Vector2(64f, 32f)
@@ -89,6 +103,7 @@ namespace LD45.Screens {
 
         private void InitializeSystems(IServiceProvider services) {
             _entityWorld.SystemManager.SetSystem(new CommanderMovementSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new SquadMovementSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BodyPhysicsSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BodyTransformSystem(), GameLoopType.Update);
 
