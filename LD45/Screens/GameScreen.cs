@@ -91,12 +91,15 @@ namespace LD45.Screens {
             _entityWorld.SystemManager.SetSystem(new BodyPhysicsSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BodyTransformSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new RecruitingSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new UnitActionSystem(services), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new UnitCooldownSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new PacketSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new ParticleAnimatingSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new IndicatorAnimatingSystem(), GameLoopType.Update);
 
             _entityWorld.SystemManager.SetSystem(new PathDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new SpriteDrawingSystem(services), GameLoopType.Draw);
+            _entityWorld.SystemManager.SetSystem(new ParticleDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new IndicatorDrawingSystem(services), GameLoopType.Draw);
         }
 

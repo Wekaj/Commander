@@ -54,6 +54,7 @@
     <Compile Include="Components\BodyComponent.cs" />
     <Compile Include="Components\CommanderComponent.cs" />
     <Compile Include="Components\IndicatorComponent.cs" />
+    <Compile Include="Components\ParticleComponent.cs" />
     <Compile Include="Components\RecruitableComponent.cs" />
     <Compile Include="Components\SpriteComponent.cs" />
     <Compile Include="Components\TransformComponent.cs" />
@@ -94,11 +95,13 @@
     <Compile Include="Systems\IndicatorDrawingSystem.cs" />
     <Compile Include="Systems\IndicatorAnimatingSystem.cs" />
     <Compile Include="Systems\PacketSystem.cs" />
+    <Compile Include="Systems\ParticleAnimatingSystem.cs" />
     <Compile Include="Systems\PathDrawingSystem.cs" />
     <Compile Include="Systems\RecruitingSystem.cs" />
+    <Compile Include="Systems\ParticleDrawingSystem.cs" />
     <Compile Include="Systems\SpriteDrawingSystem.cs" />
-    <Compile Include="Systems\SquadRepulsionSystem.cs" />
     <Compile Include="Systems\TileCollisionSystem.cs" />
+    <Compile Include="Systems\UnitActionSystem.cs" />
     <Compile Include="Systems\UnitCooldownSystem.cs" />
     <Compile Include="Systems\UnitInteractionsSystem.cs" />
     <Compile Include="Systems\UnitStrategySystem.cs" />

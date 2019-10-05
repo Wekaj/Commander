@@ -10,6 +10,7 @@ namespace LD45.Actions {
         public float Range { get; } = 8f;
         public bool TargetsAllies { get; } = false;
         public float Cooldown { get; } = 2f;
+        public ActionAnimation Animation { get; } = ActionAnimation.None;
 
         public void Perform(Entity unit, Entity target) {
             var unitComponent = unit.GetComponent<UnitComponent>();

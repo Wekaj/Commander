@@ -1,4 +1,5 @@
 ﻿using Artemis;
+using LD45.Actions;
 using LD45.Components;
 using Microsoft.Xna.Framework;
 using System.Linq;
@@ -72,8 +73,7 @@ namespace LD45.AI {
                                 bodyComponent.Force += Vector2.Normalize(targetBodyComponent.Position - bodyComponent.Position) * 150f;
                             }
                             else if (unitComponent.CooldownTimer <= 0f) {
-                                unitComponent.Action.Perform(unit, chosenTarget);
-                                unitComponent.CooldownTimer += unitComponent.Action.Cooldown;
+                                unitComponent.ActionTarget = chosenTarget;
                             }
 
                             return;

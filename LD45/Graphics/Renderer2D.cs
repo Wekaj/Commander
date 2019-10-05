@@ -45,9 +45,10 @@ namespace LD45.Graphics {
         }
 
         public void Draw(Texture2D texture, Vector2 position,
-            Rectangle? sourceRectangle = null, Vector2? origin = null, float rotation = 0f) {
+            Rectangle? sourceRectangle = null, Vector2? origin = null, float rotation = 0f, 
+            Vector2? scale = null, Color? color = null) {
 
-            _spriteBatch.Draw(texture, position, sourceRectangle, Color.White, rotation, origin ?? Vector2.Zero, Vector2.One, SpriteEffects.None, 0f);
+            _spriteBatch.Draw(texture, position, sourceRectangle, color ?? Color.White, rotation, origin ?? Vector2.Zero, scale ?? Vector2.One, SpriteEffects.None, 0f);
         }
 
         public void Draw(SpriteFont font, string text, Vector2 position,

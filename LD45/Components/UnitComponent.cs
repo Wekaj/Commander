@@ -21,6 +21,7 @@ namespace LD45.Components {
         public IUnitStrategy Strategy { get; set; } = null;
 
         public IUnitAction Action { get; set; } = null;
+        public Entity ActionTarget { get; set; } = null;
         public float CooldownTimer { get; set; } = 0f;
 
         public int SightRadius { get; set; } = 100;
