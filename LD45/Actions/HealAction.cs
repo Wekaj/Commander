@@ -8,7 +8,7 @@ namespace LD45.Actions {
         public bool TargetsAllies { get; } = true;
         public float Cooldown { get; } = 5f;
         public ActionAnimation Animation { get; } = ActionAnimation.None;
-        public ActionFlags Flags { get; }
+        public ActionFlags Flags { get; } = ActionFlags.PrefersLowHealth;
 
         public void Perform(Entity unit, Entity target) {
             var targetUnitComponent = target.GetComponent<UnitComponent>();

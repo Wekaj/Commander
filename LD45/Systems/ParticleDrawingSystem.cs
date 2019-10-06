@@ -22,7 +22,7 @@ namespace LD45.Systems {
             float p = particleComponent.LifeTimer / particleComponent.LifeDuration;
 
             _renderer.Draw(particleComponent.Texture, transformComponent.Position, origin: particleComponent.Origin, 
-                rotation: particleComponent.Rotation, scale: particleComponent.ScaleFunction(p));
+                rotation: particleComponent.Rotation, scale: particleComponent.ScaleFunction(p), color: particleComponent.Color);
         }
     }
 }

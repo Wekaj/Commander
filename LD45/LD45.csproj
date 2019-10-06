@@ -48,6 +48,7 @@
     <Compile Include="Actions\HealAction.cs" />
     <Compile Include="Actions\HitAction.cs" />
     <Compile Include="Actions\IUnitAction.cs" />
+    <Compile Include="Actions\MagicAction.cs" />
     <Compile Include="Actions\ShootAction.cs" />
     <Compile Include="Actions\SummonSpiderAction.cs" />
     <Compile Include="Actions\ThrowBombAction.cs" />
@@ -61,6 +62,7 @@
     <Compile Include="Components\BombComponent.cs" />
     <Compile Include="Components\CommanderComponent.cs" />
     <Compile Include="Components\ComponentRemover.cs" />
+    <Compile Include="Components\HopComponent.cs" />
     <Compile Include="Components\IndicatorComponent.cs" />
     <Compile Include="Components\LinkComponent.cs" />
     <Compile Include="Components\ParticleComponent.cs" />
@@ -112,6 +114,8 @@
     <Compile Include="Systems\BombSystem.cs" />
     <Compile Include="Systems\CommanderAnimatingSystem.cs" />
     <Compile Include="Systems\CommanderWeaponSystem.cs" />
+    <Compile Include="Systems\HealthBarDrawingSystem.cs" />
+    <Compile Include="Systems\HopSystem.cs" />
     <Compile Include="Systems\HudDrawingSystem.cs" />
     <Compile Include="Systems\ProjectileSystem.cs" />
     <Compile Include="Systems\StatAnimatingSystem.cs" />

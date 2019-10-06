@@ -7,7 +7,7 @@ namespace LD45.Actions {
     public sealed class HitAction : IUnitAction {
         public bool TargetsAllies { get; } = false;
         public ActionAnimation Animation { get; } = ActionAnimation.None;
-        public ActionFlags Flags { get; }
+        public ActionFlags Flags { get; } = ActionFlags.PrefersClose;
 
         public int Damage { get; set; } = 1;
         public float Force { get; set; } = 100f;

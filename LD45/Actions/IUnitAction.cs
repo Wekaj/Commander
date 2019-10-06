@@ -4,6 +4,7 @@ namespace LD45.Actions {
     public enum ActionAnimation {
         None,
         Projectile,
+        Magic,
     }
 
     public interface IUnitAction {

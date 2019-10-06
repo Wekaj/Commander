@@ -10,6 +10,7 @@ namespace LD45.Components {
         public float Rotation { get; set; }
         public float LifeDuration { get; set; }
         public float LifeTimer { get; set; }
-        public Func<float, Vector2> ScaleFunction { get; set; } = p => Vector2.One; 
+        public Func<float, Vector2> ScaleFunction { get; set; } = p => Vector2.One;
+        public Color Color { get; set; } = Color.White;
     }
 }

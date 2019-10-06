@@ -4,9 +4,9 @@ using LD45.Components;
 using Microsoft.Xna.Framework;
 
 namespace LD45.Actions {
-    public sealed class ShootAction : IUnitAction {
+    public sealed class MagicAction : IUnitAction {
         public bool TargetsAllies { get; } = false;
-        public ActionAnimation Animation { get; } = ActionAnimation.Projectile;
+        public ActionAnimation Animation { get; } = ActionAnimation.Magic;
         public ActionFlags Flags { get; } = ActionFlags.PrefersClose | ActionFlags.PrefersLowHealth;
 
         public int Damage { get; set; } = 1;
@@ -27,7 +27,7 @@ namespace LD45.Actions {
                 force = (targetBodyComponent.Position - bodyComponent.Position) * Force / distance;
             }
 
-            targetUnitComponent.IncomingPackets.Add(new Packet(unit, -Damage, DamageType.Physical, force));
+            targetUnitComponent.IncomingPackets.Add(new Packet(unit, -Damage, DamageType.Magic, force));
         }
     }
 }

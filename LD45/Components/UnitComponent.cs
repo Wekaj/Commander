@@ -24,12 +24,15 @@ namespace LD45.Components {
         public Entity ActionTarget { get; set; } = null;
         public float CooldownTimer { get; set; } = 0f;
 
+        public float HealthBarTimer { get; set; } = 0f;
+
         public List<IUnitAction> ActionOrder { get; } = new List<IUnitAction>();
 
-        public int SightRadius { get; set; } = 100;
+        public int SightRadius { get; set; } = 128;
         public List<Entity> VisibleUnits { get; } = new List<Entity>();
 
         public float DistanceWeight { get; set; } = 1f;
+        public float HealthWeight { get; set; } = 10f;
 
         public float StatDropRate { get; set; } = 0f;
     }

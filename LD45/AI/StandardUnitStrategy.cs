@@ -35,17 +35,32 @@ namespace LD45.AI {
 
             if (unitDistanceToSquad < _actionRadius) {
                 if (unitComponent.Action != null) {
+                    bool HasFlag(ActionFlags flag) {
+                        return unitComponent.Action.Flags.HasFlag(flag);
+                    }
+
                     float CalculateScore(Entity target) {
                         var targetUnitComponent = target.GetComponent<UnitComponent>();
                         var targetBodyComponent = target.GetComponent<BodyComponent>();
 
                         float distance = Vector2.Distance(bodyComponent.Position, targetBodyComponent.Position);
 
-                        float score = 1000f;
+                        float score = 1000000f;
 
-                        score -= distance * unitComponent.DistanceWeight * (unitComponent.Action.Flags.HasFlag(ActionFlags.PrefersFar) ? -1f : 1f);
+                        if (HasFlag(ActionFlags.PrefersClose)) {
+                            score -= distance * unitComponent.DistanceWeight;
+                        }
+                        if (HasFlag(ActionFlags.PrefersFar)) {
+                            score += distance * unitComponent.DistanceWeight;
+                        }
+                        if (HasFlag(ActionFlags.PrefersLowHealth)) {
+                            score -= targetUnitComponent.Health * unitComponent.HealthWeight;
+                        }
 
                         if (targetUnitComponent.Team == unitComponent.Team && !unitComponent.Action.TargetsAllies) {
+                            score = float.NegativeInfinity;
+                        }
+                        if (targetUnitComponent.Team != unitComponent.Team && unitComponent.Action.TargetsAllies) {
                             score = float.NegativeInfinity;
                         }
 
@@ -71,6 +86,10 @@ namespace LD45.AI {
 
                             if (distance > unitComponent.Action.Range) {
                                 bodyComponent.Force += Vector2.Normalize(targetBodyComponent.Position - bodyComponent.Position) * 150f;
+
+                                if (unit.HasComponent<HopComponent>()) {
+                                    unit.GetComponent<HopComponent>().IsHopping = true;
+                                }
                             }
                             else if (unitComponent.CooldownTimer <= 0f) {
                                 unitComponent.ActionTarget = chosenTarget;
@@ -89,6 +108,10 @@ namespace LD45.AI {
 
                 if (targetDistance > _passingDistance) {
                     bodyComponent.Force += Vector2.Normalize(target - bodyComponent.Position) * 150f;
+
+                    if (unit.HasComponent<HopComponent>()) {
+                        unit.GetComponent<HopComponent>().IsHopping = true;
+                    }
                 }
             }
         }

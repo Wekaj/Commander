@@ -23,6 +23,10 @@ namespace LD45.Systems {
             if (unitComponent.CooldownTimer > 0f) {
                 unitComponent.CooldownTimer -= _deltaTime;
             }
+
+            if (unitComponent.HealthBarTimer > 0f) {
+                unitComponent.HealthBarTimer -= _deltaTime;
+            }
         }
     }
 }

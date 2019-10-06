@@ -11,7 +11,7 @@ namespace LD45.Utilities {
                 "Assemblage", "Assembly",
                 "Band", "Bunch", "Bundle", "Board",
                 "Collective", "Company", "Crowd", "Club",
-                "Dozen", "Dump",
+                "Dozen",
                 "Empire",
                 "Flock", "Faculty", "Frenzy",
                 "Group", "Gathering", "Gang", 

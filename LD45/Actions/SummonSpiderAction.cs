@@ -19,7 +19,7 @@ namespace LD45.Actions {
 
         public bool TargetsAllies { get; } = false;
         public ActionAnimation Animation { get; } = ActionAnimation.None;
-        public ActionFlags Flags { get; }
+        public ActionFlags Flags { get; } = ActionFlags.PrefersClose;
 
         public float Range { get; set; } = 128f;
         public float Cooldown { get; set; } = 5f;

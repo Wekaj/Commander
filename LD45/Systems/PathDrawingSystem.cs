@@ -46,12 +46,14 @@ namespace LD45.Systems {
                 return;
             }
 
+            var color = Color.Lerp(commanderComponent.FlagColor, Color.White, 0.75f);
+
             Vector2 start = transformComponent.Position;
             Vector2 end = commanderComponent.Path.Last();
 
             float angle = commanderComponent.AngleOffset;
             for (int i = 0; i < _ringDots; i++) {
-                _renderer.Draw(_dotTexture, end + MathUtilities.VectorFromAngle(angle) * _ringRadius);
+                _renderer.Draw(_dotTexture, end + MathUtilities.VectorFromAngle(angle) * _ringRadius, color: color);
 
                 angle += _dotAngle;
             }
@@ -69,7 +71,7 @@ namespace LD45.Systems {
                     float endDistanceSqr = Vector2.DistanceSquared(dotPosition, end);
 
                     if (endDistanceSqr > _ringRadiusSqr) {
-                        _renderer.Draw(_dotTexture, dotPosition, origin: new Vector2(2f));
+                        _renderer.Draw(_dotTexture, dotPosition, origin: new Vector2(2f), color: color);
                     }
 
                     distance += _dotSpacing;
@@ -88,7 +90,7 @@ namespace LD45.Systems {
                 float endDistanceSqr = Vector2.DistanceSquared(dotPosition, end);
 
                 if (endDistanceSqr > _ringRadiusSqr) {
-                    _renderer.Draw(_dotTexture, dotPosition, origin: new Vector2(2f));
+                    _renderer.Draw(_dotTexture, dotPosition, origin: new Vector2(2f), color: color);
                 }
 
                 distance += _dotSpacing;

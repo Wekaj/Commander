@@ -41,12 +41,13 @@ namespace LD45.Screens {
 
         private readonly List<Color> _flagColors = new List<Color> {
             Color.SeaGreen,
-            Color.PaleVioletRed,
-            Color.PaleGoldenrod,
-            Color.PaleGreen,
-            Color.LightBlue,
-            Color.LightYellow,
-            Color.LightCyan,
+            Color.Lerp(Color.PaleVioletRed, Color.Red, 0.5f),
+            Color.Lerp(Color.LightBlue, Color.Blue, 0.5f),
+            Color.Lerp(Color.LightYellow, Color.OrangeRed, 0.75f),
+            Color.Lerp(Color.RosyBrown, Color.Chocolate, 0.5f),
+            Color.HotPink,
+            Color.Purple,
+            Color.Lerp(Color.White, Color.Black, 0.8f),
         };
 
         private Color PopColor() {
@@ -138,6 +139,22 @@ namespace LD45.Screens {
                         _entityBuilder.CreateBombGremlin(center);
                         break;
                     }
+                    case "Gremlin": {
+                        _entityBuilder.CreateGremlin(center);
+                        break;
+                    }
+                    case "GremlinBoss": {
+                        _entityBuilder.CreateGremlinBoss(center);
+                        break;
+                    }
+                    case "Wizard": {
+                        _entityBuilder.CreateWizard(center);
+                        break;
+                    }
+                    case "Dragon": {
+                        _entityBuilder.CreateDragon(center);
+                        break;
+                    }
 
                     case "Sword": {
                         _entityBuilder.CreateWeapon(center, new Weapon {
@@ -224,6 +241,7 @@ namespace LD45.Screens {
             _entityWorld.SystemManager.SetSystem(new CommanderAnimatingSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new StatAnimatingSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new CommanderWeaponSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new HopSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new LinkSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new AnimationSystem(), GameLoopType.Update);
 
@@ -231,6 +249,7 @@ namespace LD45.Screens {
             _entityWorld.SystemManager.SetSystem(new PathDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new SpriteDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new StatDrawingSystem(services), GameLoopType.Draw);
+            _entityWorld.SystemManager.SetSystem(new HealthBarDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new ParticleDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new IndicatorDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new HudDrawingSystem(services), GameLoopType.Draw);
@@ -248,7 +267,7 @@ namespace LD45.Screens {
             foreach (Entity commander in _entityWorld.EntityManager.GetEntities(_commanderAspect)) {
                 var transformComponent = commander.GetComponent<TransformComponent>();
 
-                _fogEffect.Parameters["Center" + i].SetValue(_camera.ToView(transformComponent.Position));
+                _fogEffect.Parameters["Center" + i].SetValue(_camera.ToView(transformComponent.Position - transformComponent.Offset));
 
                 i++;
                 if (i >= 8) {

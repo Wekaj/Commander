@@ -40,6 +40,9 @@ namespace LD45.Controllers {
                 Entity closestCommander = null;
                 float closestDistance = float.PositiveInfinity;
 
+                Entity closestRing = null;
+                float closestRingDistance = float.PositiveInfinity;
+
                 foreach (Entity commander in _entityWorld.EntityManager.GetEntities(_commanderAspect)) {
                     var bodyComponent = commander.GetComponent<BodyComponent>();
 
@@ -49,6 +52,17 @@ namespace LD45.Controllers {
                         closestCommander = commander;
                         closestDistance = distance;
                     }
+
+                    var commanderComponent = commander.GetComponent<CommanderComponent>();
+
+                    if (commanderComponent.Path.Count > 0) {
+                        float ringDistance = Vector2.Distance(mousePosition, commanderComponent.Path.Last());
+
+                        if (ringDistance < closestRingDistance) {
+                            closestRing = commander;
+                            closestRingDistance = ringDistance;
+                        }
+                    }
                 }
 
                 if (closestCommander != null && closestDistance < _selectionRadius) {
@@ -56,6 +70,13 @@ namespace LD45.Controllers {
 
                     var commanderComponent = _selectedCommander.GetComponent<CommanderComponent>();
                     commanderComponent.Path.Clear();
+
+                    commanderComponent.Path.Add(mousePosition);
+                }
+                else if (closestRing != null && closestRingDistance < _selectionRadius) {
+                    _selectedCommander = closestRing;
+
+                    var commanderComponent = _selectedCommander.GetComponent<CommanderComponent>();
 
                     commanderComponent.Path.Add(mousePosition);
                 }

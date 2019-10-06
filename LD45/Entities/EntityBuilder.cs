@@ -19,7 +19,8 @@ namespace LD45.Entities {
 
         private Texture2D _personTexture, _spiderTexture, _swordIconTexture,
             _flagPoleTexture, _flagTexture, _spiderQueenTexture, _bombGremlinTexture,
-            _bombTexture, _explosionTexture;
+            _bombTexture, _explosionTexture, _gremlinTexture, _gremlinBossTexture,
+            _wizardTexture, _dragonTexture;
         private Texture2D[] _personTextures = new Texture2D[10];
 
         public EntityBuilder(IServiceProvider services) {
@@ -43,6 +44,10 @@ namespace LD45.Entities {
             _bombGremlinTexture = content.Load<Texture2D>("Textures/BombGremlin");
             _bombTexture = content.Load<Texture2D>("Textures/Bomb");
             _explosionTexture = content.Load<Texture2D>("Textures/Explosion");
+            _gremlinTexture = content.Load<Texture2D>("Textures/Gremlin");
+            _gremlinBossTexture = content.Load<Texture2D>("Textures/GremlinBoss");
+            _wizardTexture = content.Load<Texture2D>("Textures/Wizard");
+            _dragonTexture = content.Load<Texture2D>("Textures/HellDragon");
 
             for (int i = 0; i < _personTextures.Length; i++) {
                 _personTextures[i] = content.Load<Texture2D>("Textures/Person" + (i + 1));
@@ -68,6 +73,7 @@ namespace LD45.Entities {
             unit.AddComponent(new ShadowComponent {
                 Type = ShadowType.Small
             });
+            unit.AddComponent(new HopComponent());
 
             return unit;
         }
@@ -113,6 +119,59 @@ namespace LD45.Entities {
             gremlin.AddComponent(new SpriteComponent {
                 Texture = _bombGremlinTexture,
                 Origin = new Vector2(9f, 22f)
+            });
+
+            return gremlin;
+        }
+
+        public Entity CreateGremlin(Vector2 position) {
+            Entity gremlin = CreateUnit(position, 1, 50, 1f, new StandardUnitStrategy(), Actions.GremlinHit);
+
+            gremlin.GetComponent<UnitComponent>().StatDropRate = 0.15f;
+
+            gremlin.AddComponent(new SpriteComponent {
+                Texture = _gremlinTexture,
+                Origin = new Vector2(9f, 22f)
+            });
+
+            return gremlin;
+        }
+
+        public Entity CreateWizard(Vector2 position) {
+            Entity wizard = CreateUnit(position, 1, 50, 1f, new StandardUnitStrategy(), Actions.WizardMagic);
+
+            wizard.GetComponent<UnitComponent>().StatDropRate = 0.3f;
+
+            wizard.AddComponent(new SpriteComponent {
+                Texture = _wizardTexture,
+                Origin = new Vector2(5.5f, 14f)
+            });
+
+            return wizard;
+        }
+
+        public Entity CreateDragon(Vector2 position) {
+            Entity dragon = CreateUnit(position, 1, 1000, 1f, new StandardUnitStrategy(), Actions.DragonBreath);
+
+            dragon.GetComponent<UnitComponent>().StatDropRate = 1f;
+            dragon.GetComponent<ShadowComponent>().Type = ShadowType.Big;
+
+            dragon.AddComponent(new SpriteComponent {
+                Texture = _dragonTexture,
+                Origin = new Vector2(17f, 23f)
+            });
+
+            return dragon;
+        }
+
+        public Entity CreateGremlinBoss(Vector2 position) {
+            Entity gremlin = CreateUnit(position, 1, 300, 1f, new StandardUnitStrategy(), Actions.GremlinBossHit);
+
+            gremlin.GetComponent<UnitComponent>().StatDropRate = 1f;
+
+            gremlin.AddComponent(new SpriteComponent {
+                Texture = _gremlinBossTexture,
+                Origin = new Vector2(12f, 22f)
             });
 
             return gremlin;

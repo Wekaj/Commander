@@ -36,6 +36,10 @@ namespace LD45.Systems {
 
                 int healthChange = healing - damage;
 
+                if (healthChange != 0) {
+                    unitComponent.HealthBarTimer = 1f;
+                }
+
                 unitComponent.Health += healthChange;
                 if (unitComponent.Health > unitComponent.MaxHealth) {
                     unitComponent.Health = unitComponent.MaxHealth;
@@ -49,7 +53,17 @@ namespace LD45.Systems {
                     Entity indicator = EntityWorld.CreateEntity();
                     indicator.AddComponent(new IndicatorComponent {
                         Contents = "" + Math.Abs(healthChange),
-                        Color = healthChange > 0 ? Color.Green : (crit ? Color.Lerp(Color.Red, Color.White, 0.5f) : Color.White),
+                        Color = healthChange > 0 ? Color.LightGreen : (crit ? Color.Lerp(Color.Gold, Color.White, 0.5f) : Color.White),
+                    });
+                    indicator.AddComponent(new TransformComponent {
+                        Position = transformComponent.Position
+                    });
+                }
+                else if (healthChange < 0 && unitComponent.Team == 0) {
+                    Entity indicator = EntityWorld.CreateEntity();
+                    indicator.AddComponent(new IndicatorComponent {
+                        Contents = "" + Math.Abs(healthChange),
+                        Color = Color.Lerp(Color.Red, Color.White, 0.5f),
                     });
                     indicator.AddComponent(new TransformComponent {
                         Position = transformComponent.Position

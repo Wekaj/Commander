@@ -43,8 +43,17 @@ namespace LD45.Systems {
 
                     float angle = (targetTransformComponent.Position - transformComponent.Position).GetAngle();
 
-                    CreateImpact(targetTransformComponent.Position, angle);
-                    CreateTrail(transformComponent.Position, targetTransformComponent.Position);
+                    CreateImpact(targetTransformComponent.Position, angle, Color.White);
+                    CreateTrail(transformComponent.Position, targetTransformComponent.Position, Color.White);
+                    break;
+                }
+                case ActionAnimation.Magic: {
+                    var targetTransformComponent = unitComponent.ActionTarget.GetComponent<TransformComponent>();
+
+                    float angle = (targetTransformComponent.Position - transformComponent.Position).GetAngle();
+
+                    CreateImpact(targetTransformComponent.Position, angle, Color.Yellow);
+                    CreateTrail(transformComponent.Position, targetTransformComponent.Position, Color.Yellow);
                     break;
                 }
             }
@@ -60,7 +69,7 @@ namespace LD45.Systems {
             }
         }
 
-        private void CreateImpact(Vector2 position, float rotation) {
+        private void CreateImpact(Vector2 position, float rotation, Color color) {
             Entity impact = EntityWorld.CreateEntity();
             impact.AddComponent(new ParticleComponent {
                 Texture = _impactTexture,
@@ -68,13 +77,14 @@ namespace LD45.Systems {
                 Rotation = rotation,
                 LifeDuration = 0.2f,
                 ScaleFunction = p => new Vector2(1f - p),
+                Color = color,
             });
             impact.AddComponent(new TransformComponent {
                 Position = position
             });
         }
 
-        private void CreateTrail(Vector2 start, Vector2 end) {
+        private void CreateTrail(Vector2 start, Vector2 end, Color color) {
             float angle = (end - start).GetAngle();
             float scale = Vector2.Distance(start, end) / _trailTexture.Width;
 
@@ -85,6 +95,7 @@ namespace LD45.Systems {
                 Rotation = angle,
                 ScaleFunction = p => new Vector2(scale, 1f - p),
                 LifeDuration = 0.2f,
+                Color = color,
             });
             trail.AddComponent(new TransformComponent {
                 Position = start

@@ -1,4 +1,5 @@
 ﻿using Artemis;
+using LD45.Actions;
 using LD45.Components;
 using Microsoft.Xna.Framework;
 using System.Linq;
@@ -26,24 +27,41 @@ namespace LD45.AI {
 
                 if (commanderComponent.Path.Count == 1 && distance < _actionRadius) {
                     if (unitComponent.Action != null) {
+                        bool HasFlag(ActionFlags flag) {
+                            return unitComponent.Action.Flags.HasFlag(flag);
+                        }
+
                         float CalculateScore(Entity target) {
                             var targetUnitComponent = target.GetComponent<UnitComponent>();
                             var targetBodyComponent = target.GetComponent<BodyComponent>();
 
                             float targetDistance = Vector2.Distance(bodyComponent.Position, targetBodyComponent.Position);
 
-                            float score = 1000f;
+                            float score = 1000000f;
 
-                            score -= targetDistance * unitComponent.DistanceWeight;
+                            if (HasFlag(ActionFlags.PrefersClose)) {
+                                score -= targetDistance * unitComponent.DistanceWeight;
+                            }
+                            if (HasFlag(ActionFlags.PrefersFar)) {
+                                score += targetDistance * unitComponent.DistanceWeight;
+                            }
+                            if (HasFlag(ActionFlags.PrefersLowHealth)) {
+                                score -= targetUnitComponent.Health * unitComponent.HealthWeight;
+                            }
 
                             if (targetUnitComponent.Team == unitComponent.Team && !unitComponent.Action.TargetsAllies) {
                                 score = float.NegativeInfinity;
                             }
-
-                            float distanceToSquad = Vector2.Distance(targetPosition, targetBodyComponent.Position);
-
-                            if (distanceToSquad > _actionRadius + unitComponent.Action.Range) {
+                            if (targetUnitComponent.Team != unitComponent.Team && unitComponent.Action.TargetsAllies) {
                                 score = float.NegativeInfinity;
+                            }
+
+                            if (targetPosition != null) {
+                                float distanceToSquad = Vector2.Distance(targetPosition, targetBodyComponent.Position);
+
+                                if (distanceToSquad > _actionRadius + unitComponent.Action.Range) {
+                                    score = float.NegativeInfinity;
+                                }
                             }
 
                             return score;
@@ -60,6 +78,10 @@ namespace LD45.AI {
 
                                 if (targetDistance > unitComponent.Action.Range) {
                                     bodyComponent.Force += Vector2.Normalize(targetBodyComponent.Position - bodyComponent.Position) * 150f;
+
+                                    if (unit.HasComponent<HopComponent>()) {
+                                        unit.GetComponent<HopComponent>().IsHopping = true;
+                                    }
                                 }
                                 else if (unitComponent.CooldownTimer <= 0f) {
                                     unitComponent.ActionTarget = chosenTarget;
@@ -73,9 +95,17 @@ namespace LD45.AI {
 
                 if (distance > _passingDistance) {
                     bodyComponent.Force += Vector2.Normalize(targetPosition - bodyComponent.Position) * 150f;
+
+                    if (unit.HasComponent<HopComponent>()) {
+                        unit.GetComponent<HopComponent>().IsHopping = true;
+                    }
                 }
                 else if (commanderComponent.Path.Count > 1) {
                     bodyComponent.Force += Vector2.Normalize(targetPosition - bodyComponent.Position) * 150f;
+
+                    if (unit.HasComponent<HopComponent>()) {
+                        unit.GetComponent<HopComponent>().IsHopping = true;
+                    }
 
                     commanderComponent.Path.RemoveAt(0);
                 }
