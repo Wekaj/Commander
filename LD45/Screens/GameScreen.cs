@@ -14,13 +14,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using TiledSharp;
 
 namespace LD45.Screens {
     public sealed class GameScreen : IScreen {
         private readonly EntityWorld _entityWorld = new EntityWorld();
-        private readonly TileMap _tileMap = new TileMap(64, 64);
         private readonly Camera2D _camera = new Camera2D();
         private readonly Random _random = new Random();
+        private TileMap _tileMap;
 
         private ServiceContainer _screenServices;
 
@@ -50,16 +51,22 @@ namespace LD45.Screens {
             _squadController = new SquadController(_screenServices);
 
             LoadContent(_screenServices);
-            InitializeSystems(_screenServices);
+
+            var map = new TmxMap("Content/Maps/Map1.tmx");
+
+            _tileMap = new TileMap(map.Width, map.Height);
+            _screenServices.SetService(_tileMap);
 
             var random = new Random();
-            for (int y = 0; y < _tileMap.Height; y++) {
-                for (int x = 0; x < _tileMap.Width; x++) {
+            for (int y = 0; y < map.Height; y++) {
+                for (int x = 0; x < map.Width; x++) {
                     _tileMap[x, y] = new Tile {
-                        Type = random.Next(6) == 0 ? TileType.Rocks : TileType.Plains
+                        Texture = map.Layers[0].Tiles[x + y * map.Width].Gid - 1
                     };
                 }
             }
+
+            InitializeSystems(_screenServices);
 
             _entityBuilder.CreateCommander(new Vector2(32f, 32f), new Weapon { Action = new HitAction(), Icon = _swordIconTexture }, Color.SeaGreen);
             _entityBuilder.CreateCommander(new Vector2(64f, 32f), new Weapon { Action = new ShootAction(), Icon = _swordIconTexture }, Color.PaleVioletRed);
@@ -82,7 +89,6 @@ namespace LD45.Screens {
             _screenServices = new ServiceContainer(services);
 
             _screenServices.SetService(_entityWorld);
-            _screenServices.SetService(_tileMap);
             _screenServices.SetService(_camera);
             _screenServices.SetService(_random);
         }

@@ -19,7 +19,7 @@ namespace LD45.Systems {
         };
 
         private SpriteFont _font;
-        private Texture2D _labelTexture, _bannerTexture, _bannerLeftTexture, _shieldTexture, _bookmarkTexture;
+        private Texture2D _labelTexture, _bannerTexture, _bannerLeftTexture, _shieldTexture, _tagTexture;
 
         private Vector2 _topLeft;
         private bool _indentNext = true;
@@ -40,7 +40,7 @@ namespace LD45.Systems {
             _bannerTexture = content.Load<Texture2D>("Textures/CommanderBanner");
             _bannerLeftTexture = content.Load<Texture2D>("Textures/BannerLeft");
             _shieldTexture = content.Load<Texture2D>("Textures/CommanderShield");
-            _bookmarkTexture = content.Load<Texture2D>("Textures/Bookmark");
+            _tagTexture = content.Load<Texture2D>("Textures/Tag");
         }
 
         protected override void Begin() {
@@ -60,8 +60,8 @@ namespace LD45.Systems {
             _renderer.Draw(_labelTexture, _topLeft);
             _renderer.Draw(spriteComponent.Texture, _topLeft + new Vector2(9f, 5f));
             _renderer.Draw(_font, "Cmdr. David", _topLeft + new Vector2(26f, 7f), Color.Lerp(Color.Black, Color.White, 0.1f));
-            _renderer.Draw(_bookmarkTexture, _topLeft + new Vector2(_font.MeasureString("Cmdr. David").X + 32f, -1f));
-            _renderer.Draw(commanderComponent.Weapon.Icon, _topLeft + new Vector2(_font.MeasureString("Cmdr. David").X + 31f, 0f));
+            _renderer.Draw(_tagTexture, _topLeft + new Vector2(192f, 0f));
+            _renderer.Draw(commanderComponent.Weapon.Icon, _topLeft + new Vector2(195f, 3f));
 
             if (commanderComponent.Squad.Count > 0) {
                 _renderer.Draw(_bannerLeftTexture, _topLeft + new Vector2(16f, 14f), color: commanderComponent.FlagColor);

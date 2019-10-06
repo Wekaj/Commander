@@ -26,7 +26,7 @@ namespace LD45.Graphics {
         public void Draw(TileMap tileMap) {
             for (int y = 0; y < tileMap.Height; y++) {
                 for (int x = 0; x < tileMap.Width; x++) {
-                    int texture = tileMap[x, y].Type.GetTexture();
+                    int texture = tileMap[x, y].Texture;
 
                     int textureX = texture % 8;
                     int textureY = texture / 8;
