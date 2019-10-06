@@ -71,6 +71,9 @@ namespace LD45.Screens {
             }
 
             CreateWeapon(new Vector2(128f, 128f), new Weapon { Action = new HitAction(), Icon = _swordIconTexture });
+
+            CreateStatDrop(new Vector2(160f, 128f), Color.Red);
+            CreateStatDrop(new Vector2(160f, 160f), Color.Green);
         }
 
         private void CreateServiceContainer(IServiceProvider services) {
@@ -98,6 +101,7 @@ namespace LD45.Screens {
             _entityWorld.SystemManager.SetSystem(new BodyTransformSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new RecruitingSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new WeaponPickupSystem(services), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new StatPickupSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new UnitActionSystem(services), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new UnitCooldownSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new PacketSystem(), GameLoopType.Update);
@@ -105,6 +109,7 @@ namespace LD45.Screens {
             _entityWorld.SystemManager.SetSystem(new ParticleAnimatingSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new IndicatorAnimatingSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new CommanderAnimatingSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new StatAnimatingSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new CommanderWeaponSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new LinkSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new AnimationSystem(), GameLoopType.Update);
@@ -112,6 +117,7 @@ namespace LD45.Screens {
             _entityWorld.SystemManager.SetSystem(new ShadowDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new PathDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new SpriteDrawingSystem(services), GameLoopType.Draw);
+            _entityWorld.SystemManager.SetSystem(new StatDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new ParticleDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new IndicatorDrawingSystem(services), GameLoopType.Draw);
         }
@@ -240,6 +246,25 @@ namespace LD45.Screens {
             });
 
             return weaponEntity;
+        }
+
+        private Entity CreateStatDrop(Vector2 position, Color color) {
+            Entity stat = _entityWorld.CreateEntity();
+
+            stat.AddComponent(new BodyComponent {
+                Position = position
+            });
+            stat.AddComponent(new TransformComponent {
+                Offset = new Vector2(0f, -7f)
+            });
+            stat.AddComponent(new StatDropComponent {
+                Color = color,
+            });
+            stat.AddComponent(new ShadowComponent {
+                Type = ShadowType.Small
+            });
+
+            return stat;
         }
     }
 }

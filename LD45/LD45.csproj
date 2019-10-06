@@ -61,6 +61,7 @@
     <Compile Include="Components\RecruitableComponent.cs" />
     <Compile Include="Components\ShadowComponent.cs" />
     <Compile Include="Components\SpriteComponent.cs" />
+    <Compile Include="Components\StatDropComponent.cs" />
     <Compile Include="Components\TransformComponent.cs" />
     <Compile Include="Components\UnitComponent.cs" />
     <Compile Include="Components\WeaponComponent.cs" />
@@ -101,6 +102,8 @@
     <Compile Include="Systems\BodyTransformSystem.cs" />
     <Compile Include="Systems\CommanderAnimatingSystem.cs" />
     <Compile Include="Systems\CommanderWeaponSystem.cs" />
+    <Compile Include="Systems\StatAnimatingSystem.cs" />
+    <Compile Include="Systems\StatDrawingSystem.cs" />
     <Compile Include="Systems\IndicatorDrawingSystem.cs" />
     <Compile Include="Systems\IndicatorAnimatingSystem.cs" />
     <Compile Include="Systems\LinkSystem.cs" />
@@ -116,6 +119,7 @@
     <Compile Include="Systems\UnitCooldownSystem.cs" />
     <Compile Include="Systems\UnitInteractionsSystem.cs" />
     <Compile Include="Systems\UnitStrategySystem.cs" />
+    <Compile Include="Systems\StatPickupSystem.cs" />
     <Compile Include="Systems\WeaponPickupSystem.cs" />
     <Compile Include="Tiles\Tile.cs" />
     <Compile Include="Tiles\TileMap.cs" />

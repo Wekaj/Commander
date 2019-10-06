@@ -12,7 +12,7 @@ namespace LD45.Systems {
             var bodyComponent = entity.GetComponent<BodyComponent>();
             var transformComponent = entity.GetComponent<TransformComponent>();
 
-            transformComponent.Position = bodyComponent.Position;
+            transformComponent.Position = bodyComponent.Position + transformComponent.Offset;
         }
     }
 }

@@ -40,7 +40,7 @@ namespace LD45.Systems {
                 }
             }
 
-            _renderer.Draw(texture, transformComponent.Position, origin: new Vector2(texture.Width / 2f, texture.Height / 2f));
+            _renderer.Draw(texture, transformComponent.Position - transformComponent.Offset, origin: new Vector2(texture.Width / 2f, texture.Height / 2f));
         }
     }
 }
