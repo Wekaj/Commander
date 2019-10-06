@@ -46,13 +46,7 @@ namespace LD45.Systems {
                 return;
             }
 
-            Vector2 positionSum = transformComponent.Position * _commanderPositionWeight;
-            for (int i = 0; i < commanderComponent.Squad.Count; i++) {
-                positionSum += commanderComponent.Squad[i].GetComponent<TransformComponent>().Position;
-            }
-            Vector2 averagePosition = positionSum / (_commanderPositionWeight + commanderComponent.Squad.Count);
-
-            Vector2 start = averagePosition;
+            Vector2 start = transformComponent.Position;
             Vector2 end = commanderComponent.Path.Last();
 
             float angle = commanderComponent.AngleOffset;

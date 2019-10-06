@@ -60,6 +60,7 @@ namespace LD45.Systems {
                 Origin = new Vector2(32f, 16f),
                 Rotation = rotation,
                 LifeDuration = 0.2f,
+                ScaleFunction = p => new Vector2(1f - p),
             });
             impact.AddComponent(new TransformComponent {
                 Position = position
@@ -75,7 +76,7 @@ namespace LD45.Systems {
                 Texture = _trailTexture,
                 Origin = new Vector2(0f, 16f),
                 Rotation = angle,
-                Scale = new Vector2(scale, 1f),
+                ScaleFunction = p => new Vector2(scale, 1f - p),
                 LifeDuration = 0.2f,
             });
             trail.AddComponent(new TransformComponent {

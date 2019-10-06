@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 namespace LD45.Components {
     public sealed class StatDropComponent : IComponent {
         public Color Color { get; set; }
+        public string Message { get; set; }
 
         public float Angle { get; set; }
         public float SmallAngle { get; set; }

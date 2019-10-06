@@ -259,6 +259,7 @@ namespace LD45.Screens {
             });
             stat.AddComponent(new StatDropComponent {
                 Color = color,
+                Message = "+1 Strength"
             });
             stat.AddComponent(new ShadowComponent {
                 Type = ShadowType.Small

@@ -3,7 +3,6 @@ using Artemis.System;
 using LD45.Components;
 using LD45.Graphics;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Xna.Framework;
 using System;
 
 namespace LD45.Systems {
@@ -23,7 +22,7 @@ namespace LD45.Systems {
             float p = particleComponent.LifeTimer / particleComponent.LifeDuration;
 
             _renderer.Draw(particleComponent.Texture, transformComponent.Position, origin: particleComponent.Origin, 
-                rotation: particleComponent.Rotation, scale: particleComponent.Scale, color: Color.White * (1f - p));
+                rotation: particleComponent.Rotation, scale: particleComponent.ScaleFunction(p));
         }
     }
 }

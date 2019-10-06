@@ -11,12 +11,13 @@ namespace LD45.Systems {
         private readonly Aspect _statAspect = Aspect.All(typeof(StatDropComponent), typeof(BodyComponent));
 
         public StatPickupSystem() 
-            : base(Aspect.All(typeof(CommanderComponent), typeof(BodyComponent))) {
+            : base(Aspect.All(typeof(CommanderComponent), typeof(BodyComponent), typeof(TransformComponent))) {
         }
 
         public override void Process(Entity entity) {
             var commanderComponent = entity.GetComponent<CommanderComponent>();
             var bodyComponent = entity.GetComponent<BodyComponent>();
+            var transformComponent = entity.GetComponent<TransformComponent>();
 
             foreach (Entity statEntity in EntityWorld.EntityManager.GetEntities(_statAspect)) {
                 var statComponent = statEntity.GetComponent<StatDropComponent>();
@@ -34,6 +35,15 @@ namespace LD45.Systems {
                     commanderComponent.Range += statComponent.Range;
                     commanderComponent.Speed += statComponent.Speed;
                     commanderComponent.Accuracy += statComponent.Accuracy;
+
+                    Entity indicator = EntityWorld.CreateEntity();
+                    indicator.AddComponent(new IndicatorComponent {
+                        Contents = statComponent.Message,
+                        Color = Color.Lerp(statComponent.Color, Color.White, 0.75f),
+                    });
+                    indicator.AddComponent(new TransformComponent {
+                        Position = transformComponent.Position
+                    });
 
                     statEntity.Delete();
                     break;

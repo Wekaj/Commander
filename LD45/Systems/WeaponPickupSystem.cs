@@ -56,6 +56,7 @@ namespace LD45.Systems {
                 Texture = icon,
                 Origin = new Vector2(icon.Width / 2f, icon.Height / 2f),
                 LifeDuration = 0.5f,
+                ScaleFunction = p => new Vector2(1f - p),
             });
             entity.AddComponent(new TransformComponent {
                 Position = position
@@ -68,6 +69,7 @@ namespace LD45.Systems {
                 Texture = _shinyTexture,
                 Origin = new Vector2(_shinyTexture.Width / 2f, _shinyTexture.Height / 2f),
                 LifeDuration = 0.5f,
+                ScaleFunction = p => new Vector2(1f - p),
             });
             entity.AddComponent(new TransformComponent {
                 Position = position
