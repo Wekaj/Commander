@@ -1,6 +1,7 @@
 ﻿using Artemis;
 using Artemis.System;
 using LD45.Actions;
+using LD45.Combat;
 using LD45.Components;
 using LD45.Extensions;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,7 +50,7 @@ namespace LD45.Systems {
             }
 
             unitComponent.ActionTarget = null;
-            unitComponent.CooldownTimer = unitComponent.Action.Cooldown;
+            unitComponent.CooldownTimer = CombatEquations.CalculateCooldown(entity);
         }
 
         private void CreateImpact(Vector2 position, float rotation) {
