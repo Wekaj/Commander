@@ -13,18 +13,19 @@ namespace LD45.Actions {
         public ActionAnimation Animation { get; } = ActionAnimation.Projectile;
 
         public void Perform(Entity unit, Entity target) {
-            var unitComponent = unit.GetComponent<UnitComponent>();
             var bodyComponent = unit.GetComponent<BodyComponent>();
 
             var targetUnitComponent = target.GetComponent<UnitComponent>();
             var targetBodyComponent = target.GetComponent<BodyComponent>();
 
-            targetUnitComponent.IncomingPackets.Add(new Packet(unit, -3));
+            Vector2 force = Vector2.Zero;
 
             float distance = Vector2.Distance(bodyComponent.Position, targetBodyComponent.Position);
             if (distance > 0f) {
-                targetBodyComponent.Impulse += (targetBodyComponent.Position - bodyComponent.Position) * _hitForce / distance;
+                force = (targetBodyComponent.Position - bodyComponent.Position) * _hitForce / distance;
             }
+
+            targetUnitComponent.IncomingPackets.Add(new Packet(unit, -3, DamageType.Physical, force));
         }
     }
 }

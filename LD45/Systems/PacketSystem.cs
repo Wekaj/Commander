@@ -10,26 +10,35 @@ namespace LD45.Systems {
         private readonly Aspect _unitAspect = Aspect.All(typeof(UnitComponent));
 
         public PacketSystem() 
-            : base(Aspect.All(typeof(UnitComponent), typeof(TransformComponent))) {
+            : base(Aspect.All(typeof(UnitComponent), typeof(TransformComponent), typeof(BodyComponent))) {
         }
 
         public override void Process(Entity entity) {
             var unitComponent = entity.GetComponent<UnitComponent>();
             var transformComponent = entity.GetComponent<TransformComponent>();
+            var bodyComponent = entity.GetComponent<BodyComponent>();
 
             for (int i = 0; i < unitComponent.IncomingPackets.Count; i++) {
                 Packet packet = unitComponent.IncomingPackets[i];
 
-                unitComponent.Health += packet.HealthChange;
+                int damage = CombatEquations.CalculateDamage(entity, packet);
+                int healing = CombatEquations.CalculateHealing(entity, packet);
 
+                int healthChange = healing - damage;
+
+                unitComponent.Health += healthChange;
                 if (unitComponent.Health > unitComponent.MaxHealth) {
                     unitComponent.Health = unitComponent.MaxHealth;
                 }
 
+                Vector2 knockback = CombatEquations.CalculateKnockback(entity, packet);
+
+                bodyComponent.Impulse += knockback;
+
                 Entity indicator = EntityWorld.CreateEntity();
                 indicator.AddComponent(new IndicatorComponent {
-                    Contents = (packet.HealthChange > 0 ? "+" : "") + packet.HealthChange,
-                    Color = packet.HealthChange > 0 ? Color.Green : Color.White,
+                    Contents = (healthChange > 0 ? "+" : "") + healthChange,
+                    Color = healthChange > 0 ? Color.Green : Color.White,
                 });
                 indicator.AddComponent(new TransformComponent {
                     Position = transformComponent.Position

@@ -95,13 +95,13 @@ namespace LD45.Screens {
             _entityWorld.SystemManager.SetSystem(new UnitInteractionsSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new UnitStrategySystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new TileCollisionSystem(services), GameLoopType.Update);
-            _entityWorld.SystemManager.SetSystem(new BodyPhysicsSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BodyTransformSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new RecruitingSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new WeaponPickupSystem(services), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new UnitActionSystem(services), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new UnitCooldownSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new PacketSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new BodyPhysicsSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new ParticleAnimatingSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new IndicatorAnimatingSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new CommanderAnimatingSystem(), GameLoopType.Update);

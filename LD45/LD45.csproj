@@ -50,6 +50,7 @@
     <Compile Include="AI\CommanderStrategy.cs" />
     <Compile Include="AI\IUnitStrategy.cs" />
     <Compile Include="AI\StandardUnitStrategy.cs" />
+    <Compile Include="Combat\CombatEquations.cs" />
     <Compile Include="Combat\Packet.cs" />
     <Compile Include="Components\AnimationComponent.cs" />
     <Compile Include="Components\BodyComponent.cs" />

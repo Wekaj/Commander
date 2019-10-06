@@ -10,11 +10,9 @@ namespace LD45.Actions {
         public ActionAnimation Animation { get; } = ActionAnimation.None;
 
         public void Perform(Entity unit, Entity target) {
-            var unitComponent = unit.GetComponent<UnitComponent>();
-
             var targetUnitComponent = target.GetComponent<UnitComponent>();
 
-            targetUnitComponent.IncomingPackets.Add(new Packet(unit, 10));
+            targetUnitComponent.IncomingPackets.Add(Packet.Healing(unit, 10));
         }
     }
 }
