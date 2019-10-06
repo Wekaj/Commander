@@ -52,13 +52,13 @@ namespace LD45.Graphics {
         }
 
         public void Draw(SpriteFont font, string text, Vector2 position,
-            Color? color = null, Vector2? alignment = null) {
+            Color? color = null, float scale = 1f, Vector2? origin = null) {
 
-            alignment = alignment ?? Vector2.Zero;
+            origin = origin ?? Vector2.Zero;
 
             Vector2 size = font.MeasureString(text);
 
-            _spriteBatch.DrawString(font, text, position - size * alignment.Value, color ?? Color.White);
+            _spriteBatch.DrawString(font, text, position, color ?? Color.White, 0f, size * origin.Value, scale, SpriteEffects.None, 0f);
         }
 
         public void End() {

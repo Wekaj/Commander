@@ -18,7 +18,7 @@ namespace LD45.Systems {
         private const float _ringRadiusSqr = _ringRadius * _ringRadius;
         private const int _ringDots = 16;
         private const float _dotAngle = MathHelper.TwoPi / _ringDots;
-        private const float _commanderPositionWeight = 2f;
+        private const float _commanderPositionWeight = 5f;
 
         private readonly Renderer2D _renderer;
 

@@ -35,14 +35,16 @@ namespace LD45.Systems {
 
                 bodyComponent.Impulse += knockback;
 
-                Entity indicator = EntityWorld.CreateEntity();
-                indicator.AddComponent(new IndicatorComponent {
-                    Contents = (healthChange > 0 ? "+" : "") + healthChange,
-                    Color = healthChange > 0 ? Color.Green : Color.White,
-                });
-                indicator.AddComponent(new TransformComponent {
-                    Position = transformComponent.Position
-                });
+                if (healthChange < 0 && unitComponent.Team != 0 || healthChange > 0) {
+                    Entity indicator = EntityWorld.CreateEntity();
+                    indicator.AddComponent(new IndicatorComponent {
+                        Contents = (healthChange > 0 ? "+" : "") + healthChange,
+                        Color = healthChange > 0 ? Color.Green : (crit ? Color.Lerp(Color.Red, Color.White, 0.5f) : Color.White),
+                    });
+                    indicator.AddComponent(new TransformComponent {
+                        Position = transformComponent.Position
+                    });
+                }
 
                 if (unitComponent.Health <= 0) {
                     Kill(entity);

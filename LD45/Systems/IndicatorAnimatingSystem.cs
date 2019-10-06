@@ -27,6 +27,23 @@ namespace LD45.Systems {
 
             transformComponent.Position -= new Vector2(0f, _riseSpeed) * _deltaTime;
 
+            indicatorComponent.Angle += 10f * _deltaTime;
+
+            float p = indicatorComponent.Life / _maxLife;
+            float scale;
+            if (p < 0.2f) {
+                float subp = p / 0.2f;
+
+                scale = 1f - (float)Math.Pow(1f - subp, 2f);
+            }
+            else {
+                float subp = (p - 0.2f) / 0.8f;
+
+                scale = 1f - (float)Math.Pow(subp, 6f);
+            }
+
+            indicatorComponent.Scale = scale;
+
             indicatorComponent.Life += _deltaTime;
             if (indicatorComponent.Life > _maxLife) {
                 entity.Delete();

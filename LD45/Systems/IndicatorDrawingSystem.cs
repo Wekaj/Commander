@@ -12,7 +12,8 @@ namespace LD45.Systems {
     public sealed class IndicatorDrawingSystem : EntityProcessingSystem {
         private readonly Renderer2D _renderer;
 
-        private SpriteFont _basicFont;
+        private SpriteFont _font;
+        private Texture2D _squareTexture;
 
         public IndicatorDrawingSystem(IServiceProvider services) 
             : base(Aspect.All(typeof(IndicatorComponent), typeof(TransformComponent))) {
@@ -25,14 +26,22 @@ namespace LD45.Systems {
         private void LoadContent(IServiceProvider services) {
             var content = services.GetRequiredService<ContentManager>();
 
-            _basicFont = content.Load<SpriteFont>("Fonts/Basic");
+            _font = content.Load<SpriteFont>("Fonts/Small");
+            _squareTexture = content.Load<Texture2D>("Textures/BigSquare");
         }
 
         public override void Process(Entity entity) {
             var indicatorComponent = entity.GetComponent<IndicatorComponent>();
             var transformComponent = entity.GetComponent<TransformComponent>();
 
-            _renderer.Draw(_basicFont, indicatorComponent.Contents, transformComponent.Position, indicatorComponent.Color, new Vector2(0.5f));
+            //_renderer.Draw(_squareTexture, transformComponent.Position, color: Color.Lerp(Color.LightPink, Color.Black, 0.5f), 
+            //    origin: new Vector2(_squareTexture.Width / 2f, _squareTexture.Height / 2f), rotation: indicatorComponent.Angle,
+            //    scale: new Vector2(indicatorComponent.Scale));
+
+            _renderer.Draw(_font, indicatorComponent.Contents, transformComponent.Position + new Vector2(1f), Color.Lerp(indicatorComponent.Color, Color.Black, 0.5f),
+                scale: indicatorComponent.Scale, origin: new Vector2(0.5f));
+            _renderer.Draw(_font, indicatorComponent.Contents, transformComponent.Position, indicatorComponent.Color, 
+                scale: indicatorComponent.Scale, origin: new Vector2(0.5f));
         }
     }
 }
