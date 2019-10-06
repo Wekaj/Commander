@@ -119,6 +119,7 @@ namespace LD45.Screens {
             _entityWorld.SystemManager.SetSystem(new StatDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new ParticleDrawingSystem(services), GameLoopType.Draw);
             _entityWorld.SystemManager.SetSystem(new IndicatorDrawingSystem(services), GameLoopType.Draw);
+            _entityWorld.SystemManager.SetSystem(new HudDrawingSystem(services), GameLoopType.Draw);
         }
 
         public void Update(GameTime gameTime) {

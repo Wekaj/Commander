@@ -5,6 +5,8 @@ using LD45.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Runtime.InteropServices;
 
 namespace LD45 {
     public sealed class LD45Game : Game {
@@ -12,6 +14,15 @@ namespace LD45 {
         private readonly ServiceContainer _services;
         private readonly ScreenManager _screens;
         private readonly InputManager _input;
+
+        private const string SDL = "SDL2.dll";
+
+        [DllImport(SDL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SDL_MaximizeWindow(IntPtr window);
+
+        private void MaximizeWindow() {
+            SDL_MaximizeWindow(Window.Handle);
+        }
 
         public LD45Game() {
             _graphics = new GraphicsDeviceManager(this);
@@ -32,6 +43,8 @@ namespace LD45 {
             InitializeServices();
 
             _screens.Push(new TitleScreen());
+
+            MaximizeWindow();
         }
 
         protected override void LoadContent() {
