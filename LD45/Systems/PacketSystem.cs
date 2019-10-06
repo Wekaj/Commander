@@ -3,6 +3,7 @@ using Artemis.System;
 using LD45.Combat;
 using LD45.Components;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace LD45.Systems {
     public sealed class PacketSystem : EntityProcessingSystem {
@@ -38,7 +39,7 @@ namespace LD45.Systems {
                 if (healthChange < 0 && unitComponent.Team != 0 || healthChange > 0) {
                     Entity indicator = EntityWorld.CreateEntity();
                     indicator.AddComponent(new IndicatorComponent {
-                        Contents = (healthChange > 0 ? "+" : "") + healthChange,
+                        Contents = "" + Math.Abs(healthChange),
                         Color = healthChange > 0 ? Color.Green : (crit ? Color.Lerp(Color.Red, Color.White, 0.5f) : Color.White),
                     });
                     indicator.AddComponent(new TransformComponent {
