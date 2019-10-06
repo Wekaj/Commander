@@ -20,6 +20,7 @@ namespace LD45.Controllers {
         private readonly Camera2D _camera;
 
         private Entity _selectedCommander;
+        private Vector2 _panPosition;
 
         public SquadController(IServiceProvider services) {
             _input = services.GetRequiredService<InputManager>();
@@ -73,6 +74,13 @@ namespace LD45.Controllers {
             }
             else if (_input.Bindings.JustReleased(BindingId.LeftClick)) {
                 _selectedCommander = null;
+            }
+
+            if (_input.Bindings.JustPressed(BindingId.RightClick)) {
+                _panPosition = mousePosition;
+            }
+            else if (_input.Bindings.IsPressed(BindingId.RightClick)) {
+                _camera.Position += _panPosition - mousePosition;
             }
         }
     }

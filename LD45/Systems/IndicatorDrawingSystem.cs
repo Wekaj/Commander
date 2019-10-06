@@ -43,5 +43,9 @@ namespace LD45.Systems {
             _renderer.Draw(_font, indicatorComponent.Contents, transformComponent.Position, indicatorComponent.Color, 
                 scale: indicatorComponent.Scale, origin: new Vector2(0.5f));
         }
+
+        protected override void End() {
+            base.End();
+        }
     }
 }

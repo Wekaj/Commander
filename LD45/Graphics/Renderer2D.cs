@@ -10,7 +10,7 @@ namespace LD45.Graphics {
         private readonly SpriteBatch _spriteBatch;
 
         private readonly GameWindow _window;
-        private RenderTarget2D _renderTarget;
+        private RenderTarget2D _renderTarget1, _renderTarget2;
         private bool _boundsUpdatePending = false;
 
         private RendererSettings _settings;
@@ -24,7 +24,8 @@ namespace LD45.Graphics {
             Scale = scale;
 
             Bounds = ScaleBounds(window.ClientBounds);
-            _renderTarget = new RenderTarget2D(graphicsDevice, Bounds.Width, Bounds.Height);
+            _renderTarget1 = new RenderTarget2D(graphicsDevice, Bounds.Width, Bounds.Height);
+            _renderTarget2 = new RenderTarget2D(graphicsDevice, Bounds.Width, Bounds.Height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
 
             window.ClientSizeChanged += Window_ClientSizeChanged;
         }
@@ -32,11 +33,17 @@ namespace LD45.Graphics {
         public int Scale { get; }
         public Rectangle Bounds { get; private set; }
 
+        public void Refresh() {
+            _defaultTargets = _graphicsDevice.GetRenderTargets();
+
+            _graphicsDevice.SetRenderTarget(_renderTarget2);
+            _graphicsDevice.Clear(Color.TransparentBlack);
+        }
+
         public void Begin(RendererSettings settings = null) {
             _settings = settings ?? _defaultSettings;
 
-            _defaultTargets = _graphicsDevice.GetRenderTargets();
-            _graphicsDevice.SetRenderTarget(_renderTarget);
+            _graphicsDevice.SetRenderTarget(_renderTarget1);
             _graphicsDevice.Clear(Color.TransparentBlack);
 
             _spriteBatch.Begin(_settings.SortMode, _settings.BlendState, _settings.SamplerState,
@@ -64,17 +71,28 @@ namespace LD45.Graphics {
         public void End() {
             _spriteBatch.End();
 
-            _graphicsDevice.SetRenderTargets(_defaultTargets);
+            _graphicsDevice.SetRenderTarget(_renderTarget2);
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, effect: _settings.LayerEffect);
-            _spriteBatch.Draw(_renderTarget, Vector2.Zero, color: Color.White, scale: new Vector2(Scale));
+            _spriteBatch.Draw(_renderTarget1, Vector2.Zero, color: Color.White);
+            _spriteBatch.End();
+        }
+
+        public void Output() {
+            _graphicsDevice.SetRenderTargets(_defaultTargets);
+
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            _spriteBatch.Draw(_renderTarget2, Vector2.Zero, color: Color.White, scale: new Vector2(Scale));
             _spriteBatch.End();
 
             if (_boundsUpdatePending) {
                 Bounds = ScaleBounds(_window.ClientBounds);
 
-                _renderTarget.Dispose();
-                _renderTarget = new RenderTarget2D(_graphicsDevice, Bounds.Width, Bounds.Height);
+                _renderTarget1.Dispose();
+                _renderTarget1 = new RenderTarget2D(_graphicsDevice, Bounds.Width, Bounds.Height);
+
+                _renderTarget2.Dispose();
+                _renderTarget2 = new RenderTarget2D(_graphicsDevice, Bounds.Width, Bounds.Height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
 
                 _boundsUpdatePending = false;
             }

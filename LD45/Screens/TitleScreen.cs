@@ -35,11 +35,13 @@ namespace LD45.Screens {
         }
 
         public void Draw(GameTime gameTime) {
+            _renderer.Refresh();
             _renderer.Begin();
 
             _renderer.Draw(_basicFont, "Welcome to the title screen! Click to begin.", new Vector2(8f));
 
             _renderer.End();
+            _renderer.Output();
         }
     }
 }

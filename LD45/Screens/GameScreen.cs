@@ -129,6 +129,8 @@ namespace LD45.Screens {
         }
 
         public void Draw(GameTime gameTime) {
+            _renderer.Refresh();
+
             _rendererSettings.TransformMatrix = _camera.GetTransformMatrix();
             _renderer.Begin(_rendererSettings);
 
@@ -136,6 +138,7 @@ namespace LD45.Screens {
             _entityWorld.Draw();
 
             _renderer.End();
+            _renderer.Output();
         }
     }
 }

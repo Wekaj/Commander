@@ -14,6 +14,9 @@ namespace LD45.Systems {
         private const float _indentWidth = 12f;
 
         private readonly Renderer2D _renderer;
+        private readonly RendererSettings _rendererSettings = new RendererSettings {
+            SamplerState = SamplerState.PointClamp
+        };
 
         private SpriteFont _font;
         private Texture2D _labelTexture, _bannerTexture, _bannerLeftTexture, _shieldTexture;
@@ -43,6 +46,10 @@ namespace LD45.Systems {
             base.Begin();
 
             _topLeft = new Vector2(12f);
+
+            // A little hacky.
+            _renderer.End();
+            _renderer.Begin(_rendererSettings);
         }
 
         public override void Process(Entity entity) {
