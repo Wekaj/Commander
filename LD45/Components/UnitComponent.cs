@@ -28,5 +28,7 @@ namespace LD45.Components {
         public List<Entity> VisibleUnits { get; } = new List<Entity>();
 
         public float DistanceWeight { get; set; } = 1f;
+
+        public float StatDropRate { get; set; } = 0f;
     }
 }

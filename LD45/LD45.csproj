@@ -67,6 +67,7 @@
     <Compile Include="Components\WeaponComponent.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\SquadController.cs" />
+    <Compile Include="Entities\EntityBuilder.cs" />
     <Compile Include="Extensions\ICollectionExtensions.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\IListExtensions.cs" />
