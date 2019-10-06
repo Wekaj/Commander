@@ -20,6 +20,7 @@ namespace LD45.Combat {
         public int HealthChange { get; set; }
         public DamageType DamageType { get; set; }
         public Vector2 Force { get; set; }
+        public string Sound { get; set; } = null;
 
         public static Packet Healing(Entity source, int amount) {
             return new Packet(source, amount, DamageType.Pure, Vector2.Zero);

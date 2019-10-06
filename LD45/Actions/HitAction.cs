@@ -13,6 +13,7 @@ namespace LD45.Actions {
         public float Force { get; set; } = 100f;
         public float Range { get; set; } = 8f;
         public float Cooldown { get; set; } = 1f;
+        public string Sound { get; set; } = null;
 
         public void Perform(Entity unit, Entity target) {
             var bodyComponent = unit.GetComponent<BodyComponent>();
@@ -27,7 +28,7 @@ namespace LD45.Actions {
                 force = (targetBodyComponent.Position - bodyComponent.Position) * Force / distance;
             }
 
-            targetUnitComponent.IncomingPackets.Add(new Packet(unit, -Damage, DamageType.Physical, force));
+            targetUnitComponent.IncomingPackets.Add(new Packet(unit, -Damage, DamageType.Physical, force) { Sound = Sound });
         }
     }
 }

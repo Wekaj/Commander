@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace LD45 {
@@ -42,9 +43,11 @@ namespace LD45 {
 
             InitializeServices();
 
-            _screens.Push(new TitleScreen());
+            _screens.Push(new LoadingScreen());
 
             MaximizeWindow();
+
+            Window.Title = "Commander";
         }
 
         protected override void LoadContent() {
@@ -60,7 +63,12 @@ namespace LD45 {
 
             _input.Update();
 
-            _screens.Update(gameTime);
+            try {
+                _screens.Update(gameTime);
+            }
+            catch (Exception e) {
+                File.CreateText(DateTime.Now.ToString() + "_log").Write(e.ToString());
+            }
 
             base.Update(gameTime);
         }
@@ -68,7 +76,12 @@ namespace LD45 {
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.TransparentBlack);
 
-            _screens.Draw(gameTime);
+            try {
+                _screens.Draw(gameTime);
+            }
+            catch (Exception e) {
+                File.CreateText(DateTime.Now.ToString() + "_log").Write(e.ToString());
+            }
 
             base.Draw(gameTime);
         }

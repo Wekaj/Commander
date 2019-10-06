@@ -1,5 +1,6 @@
 ﻿using Artemis;
 using Artemis.System;
+using LD45.Audio;
 using LD45.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
@@ -12,11 +13,13 @@ namespace LD45.Systems {
         private readonly Aspect _recruitableAspect = Aspect.All(typeof(RecruitableComponent), typeof(UnitComponent), typeof(BodyComponent));
 
         private readonly ComponentRemover _componentRemover;
+        private readonly SoundPlayer _soundPlayer;
 
         public RecruitingSystem(IServiceProvider services) 
             : base(Aspect.All(typeof(CommanderComponent), typeof(BodyComponent))) {
 
             _componentRemover = services.GetRequiredService<ComponentRemover>();
+            _soundPlayer = services.GetRequiredService<SoundPlayer>();
         }
 
         public override void Process(Entity entity) {
@@ -68,6 +71,8 @@ namespace LD45.Systems {
                         commanderComponent.Squad.Add(recruitableEntity);
                         recruitableUnitComponent.Commander = entity;
                     }
+
+                    _soundPlayer.Play("Hello");
 
                     recruitableEntity.RemoveComponent<RecruitableComponent>();
                 }

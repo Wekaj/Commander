@@ -47,6 +47,7 @@ namespace LD45.Actions {
             Force = 200f,
             Range = 9f,
             Cooldown = 2f,
+            Sound = "Bite",
         };
         public IUnitAction SpiderSpit { get; } = new ShootAction {
             Damage = 6,

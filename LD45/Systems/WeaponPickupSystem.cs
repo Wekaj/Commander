@@ -1,5 +1,6 @@
 ﻿using Artemis;
 using Artemis.System;
+using LD45.Audio;
 using LD45.Components;
 using LD45.Entities;
 using LD45.Extensions;
@@ -17,6 +18,7 @@ namespace LD45.Systems {
         private readonly Aspect _weaponAspect = Aspect.All(typeof(WeaponComponent), typeof(BodyComponent));
 
         private readonly EntityBuilder _entityBuilder;
+        private readonly SoundPlayer _soundPlayer;
         private readonly Random _random;
 
         private Texture2D _shinyTexture;
@@ -25,6 +27,7 @@ namespace LD45.Systems {
             : base(Aspect.All(typeof(CommanderComponent), typeof(BodyComponent))) {
 
             _entityBuilder = services.GetRequiredService<EntityBuilder>();
+            _soundPlayer = services.GetRequiredService<SoundPlayer>();
             _random = services.GetRequiredService<Random>();
 
             LoadContent(services);
@@ -59,6 +62,8 @@ namespace LD45.Systems {
 
                     CreateShiny(bodyComponent.Position);
                     CreateIconParticle(bodyComponent.Position, weaponComponent.Weapon.Icon);
+
+                    _soundPlayer.Play("Pickup");
 
                     weaponEntity.Delete();
                     break;

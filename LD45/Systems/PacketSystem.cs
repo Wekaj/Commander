@@ -1,5 +1,6 @@
 ﻿using Artemis;
 using Artemis.System;
+using LD45.Audio;
 using LD45.Combat;
 using LD45.Components;
 using LD45.Entities;
@@ -14,13 +15,17 @@ namespace LD45.Systems {
         private readonly Aspect _unitAspect = Aspect.All(typeof(UnitComponent), typeof(BodyComponent));
 
         private readonly EntityBuilder _entityBuilder;
+        private readonly SoundPlayer _soundPlayer;
         private readonly Random _random;
+        private readonly Action _victoryAction;
 
         public PacketSystem(IServiceProvider services) 
             : base(Aspect.All(typeof(UnitComponent), typeof(TransformComponent), typeof(BodyComponent))) {
 
             _entityBuilder = services.GetRequiredService<EntityBuilder>();
+            _soundPlayer = services.GetRequiredService<SoundPlayer>();
             _random = services.GetRequiredService<Random>();
+            _victoryAction = services.GetRequiredService<Action>();
         }
 
         public override void Process(Entity entity) {
@@ -38,6 +43,14 @@ namespace LD45.Systems {
 
                 if (healthChange != 0) {
                     unitComponent.HealthBarTimer = 1f;
+                }
+
+                if (packet.Sound != null) {
+                    _soundPlayer.Play(packet.Sound);
+                }
+
+                if (healthChange < 0) {
+                    _soundPlayer.Play("Hit");
                 }
 
                 unitComponent.Health += healthChange;
@@ -72,6 +85,10 @@ namespace LD45.Systems {
 
                 if (unitComponent.Health <= 0) {
                     Kill(entity);
+
+                    if (unitComponent.IsBoss) {
+                        _victoryAction();
+                    }
                 }
             }
 

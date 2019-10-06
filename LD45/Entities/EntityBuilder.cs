@@ -154,6 +154,7 @@ namespace LD45.Entities {
             Entity dragon = CreateUnit(position, 1, 1000, 1f, new StandardUnitStrategy(), Actions.DragonBreath);
 
             dragon.GetComponent<UnitComponent>().StatDropRate = 1f;
+            dragon.GetComponent<UnitComponent>().IsBoss = true;
             dragon.GetComponent<ShadowComponent>().Type = ShadowType.Big;
 
             dragon.AddComponent(new SpriteComponent {
@@ -334,7 +335,7 @@ namespace LD45.Entities {
         }
 
         private StatDropComponent CreateRandomStatDropComponent() {
-            switch (_random.Next(8)) {
+            switch (_random.Next(7)) {
                 case 0: {
                     return new StatDropComponent {
                         Color = Color.Red,
@@ -352,39 +353,32 @@ namespace LD45.Entities {
                 case 2: {
                     return new StatDropComponent {
                         Color = Color.Purple,
-                        Message = "+1 Magic",
-                        Magic = 1,
-                    };
-                }
-                case 3: {
-                    return new StatDropComponent {
-                        Color = Color.Cyan,
                         Message = "+1 Resistance",
                         Resistance = 1,
                     };
                 }
-                case 4: {
+                case 3: {
                     return new StatDropComponent {
                         Color = Color.DarkGray,
                         Message = "+1 Force",
                         Force = 1,
                     };
                 }
-                case 5: {
+                case 4: {
                     return new StatDropComponent {
-                        Color = Color.RosyBrown,
+                        Color = Color.Black,
                         Message = "+1 Stability",
                         Stability = 1,
                     };
                 }
-                case 6: {
+                case 5: {
                     return new StatDropComponent {
                         Color = Color.Yellow,
                         Message = "+1 Speed",
                         Speed = 1,
                     };
                 }
-                case 7: {
+                case 6: {
                     return new StatDropComponent {
                         Color = Color.Green,
                         Message = "+1 Accuracy",

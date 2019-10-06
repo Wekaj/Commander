@@ -1,6 +1,7 @@
 ﻿using Artemis;
 using Artemis.Manager;
 using LD45.Actions;
+using LD45.Audio;
 using LD45.Components;
 using LD45.Controllers;
 using LD45.Entities;
@@ -35,6 +36,7 @@ namespace LD45.Screens {
         private EntitySpawner _spawner;
         private EntityBuilder _entityBuilder;
         private ActionList _actions;
+        private SoundPlayer _soundPlayer;
 
         private Texture2D _swordIconTexture, _stickIconTexture, _bowIconTexture, _staffIconTexture;
         private Effect _fogEffect;
@@ -69,11 +71,18 @@ namespace LD45.Screens {
         public void Initialize(IServiceProvider services) {
             CreateServiceContainer(services);
 
+            _screenServices.SetService((Action)(() => {
+                ReplacedSelf?.Invoke(this, new ScreenEventArgs(new VictoryScreen()));
+            }));
+
             _spawner = new EntitySpawner(_screenServices);
             _screenServices.SetService(_spawner);
 
             _entityBuilder = new EntityBuilder(_screenServices);
             _screenServices.SetService(_entityBuilder);
+
+            _soundPlayer = new SoundPlayer(_screenServices);
+            _screenServices.SetService(_soundPlayer);
 
             _actions = new ActionList(_screenServices);
             _screenServices.SetService(_actions);
@@ -218,7 +227,7 @@ namespace LD45.Screens {
             _fogEffect = content.Load<Effect>("Effects/Fog");
             _fogEffect.Parameters["ClearRadiusSqr"].SetValue(256f * 256f);
             _fogEffect.Parameters["ClearBorderRadiusSqr"].SetValue(254f * 254f);
-            _fogEffect.Parameters["FogColor"].SetValue(Color.Lerp(Color.White, Color.Black, 1f).ToVector4());
+            _fogEffect.Parameters["FogColor"].SetValue(Color.Lerp(Color.White, Color.Black, 0.95f).ToVector4());
             _rendererSettings.LayerEffect = _fogEffect;
         }
 
@@ -229,7 +238,7 @@ namespace LD45.Screens {
             _entityWorld.SystemManager.SetSystem(new BodyTransformSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new RecruitingSystem(services), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new WeaponPickupSystem(services), GameLoopType.Update);
-            _entityWorld.SystemManager.SetSystem(new StatPickupSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new StatPickupSystem(services), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new UnitActionSystem(services), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new UnitCooldownSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BombSystem(services), GameLoopType.Update);
@@ -241,7 +250,7 @@ namespace LD45.Screens {
             _entityWorld.SystemManager.SetSystem(new CommanderAnimatingSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new StatAnimatingSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new CommanderWeaponSystem(), GameLoopType.Update);
-            _entityWorld.SystemManager.SetSystem(new HopSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new HopSystem(services), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new LinkSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new AnimationSystem(), GameLoopType.Update);
 
@@ -273,6 +282,11 @@ namespace LD45.Screens {
                 if (i >= 8) {
                     break;
                 }
+            }
+
+            if (i == 0) {
+                ReplacedSelf?.Invoke(this, new ScreenEventArgs(new FailureScreen()));
+                return;
             }
 
             for (; i < 8; i++) {

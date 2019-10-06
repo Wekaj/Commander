@@ -7,9 +7,10 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace LD45.Screens {
-    public sealed class TitleScreen : IScreen {
+    public sealed class FailureScreen : IScreen {
         private Renderer2D _renderer;
         private InputManager _input;
+        private ContentManager _content;
 
         private SpriteFont _basicFont;
         private Texture2D _titleTexture;
@@ -19,20 +20,20 @@ namespace LD45.Screens {
         public event EventHandler PoppedSelf;
 
         public void Initialize(IServiceProvider services) {
-            _renderer = services.GetRequiredService<Renderer2D>();
             _input = services.GetRequiredService<InputManager>();
+            _renderer = services.GetRequiredService<Renderer2D>();
+            _content = services.GetRequiredService<ContentManager>();
 
-            LoadContent(services.GetRequiredService<ContentManager>());
+            LoadContent(_content);
         }
 
         private void LoadContent(ContentManager content) {
-            _basicFont = content.Load<SpriteFont>("Fonts/Basic");
-            _titleTexture = content.Load<Texture2D>("Textures/Title");
+            _basicFont = content.Load<SpriteFont>("Fonts/Small");
         }
 
         public void Update(GameTime gameTime) {
-            if (_input.Bindings.IsPressed(BindingId.LeftClick) && _input.Bindings.IsPressed(BindingId.RightClick)) {
-                ReplacedSelf?.Invoke(this, new ScreenEventArgs(new GameScreen()));
+            if (_input.Bindings.IsPressed(BindingId.LeftClick) || _input.Bindings.IsPressed(BindingId.RightClick)) {
+                ReplacedSelf?.Invoke(this, new ScreenEventArgs(new TitleScreen()));
             }
         }
 
@@ -40,7 +41,7 @@ namespace LD45.Screens {
             _renderer.Refresh();
             _renderer.Begin(color: Color.Lerp(Color.White, Color.Black, 0.95f));
 
-            _renderer.Draw(_titleTexture, _renderer.Bounds.Size.ToVector2() / 2f, origin: _titleTexture.Bounds.Size.ToVector2() / 2f);
+            _renderer.Draw(_basicFont, "All your commanders died! You lose.", new Vector2(4f), color: Color.White);
 
             _renderer.End();
             _renderer.Output();

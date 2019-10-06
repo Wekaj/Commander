@@ -27,6 +27,8 @@ namespace LD45.Graphics {
 
         public void Draw(TileMap tileMap) {
             Rectangle bounds = _renderer.Bounds;
+            bounds.X = 0;
+            bounds.Y = 0;
             bounds.Offset(_camera.Position);
 
             int startX = Math.Max(bounds.Left / Constants.TileSize - 1, 0);

@@ -55,6 +55,7 @@
     <Compile Include="AI\CommanderStrategy.cs" />
     <Compile Include="AI\IUnitStrategy.cs" />
     <Compile Include="AI\StandardUnitStrategy.cs" />
+    <Compile Include="Audio\SoundPlayer.cs" />
     <Compile Include="Combat\CombatEquations.cs" />
     <Compile Include="Combat\Packet.cs" />
     <Compile Include="Components\AnimationComponent.cs" />
@@ -107,7 +108,10 @@
     <Compile Include="Screens\IScreen.cs" />
     <Compile Include="Screens\ScreenEventArgs.cs" />
     <Compile Include="Screens\ScreenManager.cs" />
+    <Compile Include="Screens\LoadingScreen.cs" />
     <Compile Include="Screens\TitleScreen.cs" />
+    <Compile Include="Screens\FailureScreen.cs" />
+    <Compile Include="Screens\VictoryScreen.cs" />
     <Compile Include="Systems\AnimationSystem.cs" />
     <Compile Include="Systems\BodyPhysicsSystem.cs" />
     <Compile Include="Systems\BodyTransformSystem.cs" />

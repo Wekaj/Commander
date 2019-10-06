@@ -1,4 +1,5 @@
 ﻿using Artemis;
+using LD45.Audio;
 using LD45.Components;
 using LD45.Entities;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,10 +10,12 @@ namespace LD45.Actions {
     public sealed class ThrowBombAction : IUnitAction {
         private readonly EntityBuilder _entityBuilder;
         private readonly EntitySpawner _entitySpawner;
+        private readonly SoundPlayer _soundPlayer;
 
         public ThrowBombAction(IServiceProvider services) {
             _entityBuilder = services.GetRequiredService<EntityBuilder>();
             _entitySpawner = services.GetRequiredService<EntitySpawner>();
+            _soundPlayer = services.GetRequiredService<SoundPlayer>();
         }
 
         public bool TargetsAllies { get; } = false;
@@ -33,6 +36,8 @@ namespace LD45.Actions {
             _entitySpawner.Enqueue(entityWorld => {
                 _entityBuilder.CreateBomb(start, end);
             });
+
+            _soundPlayer.Play("Throw");
         }
     }
 }

@@ -1,7 +1,10 @@
 ﻿using Artemis;
 using Artemis.System;
+using LD45.Audio;
 using LD45.Components;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace LD45.Systems {
     public sealed class StatPickupSystem : EntityProcessingSystem {
@@ -10,8 +13,12 @@ namespace LD45.Systems {
 
         private readonly Aspect _statAspect = Aspect.All(typeof(StatDropComponent), typeof(BodyComponent));
 
-        public StatPickupSystem() 
+        private readonly SoundPlayer _soundPlayer;
+
+        public StatPickupSystem(IServiceProvider services) 
             : base(Aspect.All(typeof(CommanderComponent), typeof(BodyComponent), typeof(TransformComponent))) {
+
+            _soundPlayer = services.GetRequiredService<SoundPlayer>();
         }
 
         public override void Process(Entity entity) {
@@ -44,6 +51,8 @@ namespace LD45.Systems {
                     indicator.AddComponent(new TransformComponent {
                         Position = transformComponent.Position
                     });
+
+                    _soundPlayer.Play("Powerup");
 
                     statEntity.Delete();
                     break;

@@ -1,10 +1,12 @@
 ﻿using Artemis;
 using Artemis.System;
+using LD45.Audio;
 using LD45.Combat;
 using LD45.Components;
 using LD45.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -14,19 +16,30 @@ namespace LD45.Systems {
         private readonly Aspect _unitAspect = Aspect.All(typeof(UnitComponent), typeof(BodyComponent));
 
         private readonly EntityBuilder _entityBuilder;
+        private readonly SoundPlayer _soundPlayer;
+
+        private readonly SoundEffectInstance _hissSound;
 
         private float _deltaTime;
+        private bool _hiss = false;
 
         public BombSystem(IServiceProvider services) 
             : base(Aspect.All(typeof(BombComponent), typeof(TransformComponent), typeof(BodyComponent))) {
 
             _entityBuilder = services.GetRequiredService<EntityBuilder>();
+            _soundPlayer = services.GetRequiredService<SoundPlayer>();
+
+            _hissSound = _soundPlayer.CreateInstance("Hiss");
+            _hissSound.Play();
+            _hissSound.IsLooped = true;
+            _hissSound.Pause();
         }
 
         protected override void Begin() {
             base.Begin();
 
             _deltaTime = (float)TimeSpan.FromTicks(EntityWorld.Delta).TotalSeconds;
+            _hiss = false;
         }
 
         public override void Process(Entity entity) {
@@ -56,7 +69,23 @@ namespace LD45.Systems {
 
                 _entityBuilder.CreateExplosion(transformComponent.Position);
 
+                _soundPlayer.Play("Boom");
+
                 entity.Delete();
+            }
+            else {
+                _hiss = true;
+            }
+        }
+
+        protected override void End() {
+            base.End();
+
+            if (_hiss) {
+                _hissSound.Resume();
+            }
+            else {
+                _hissSound.Pause();
             }
         }
     }

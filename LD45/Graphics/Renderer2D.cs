@@ -41,11 +41,11 @@ namespace LD45.Graphics {
             _graphicsDevice.Clear(Color.TransparentBlack);
         }
 
-        public void Begin(RendererSettings settings = null) {
+        public void Begin(RendererSettings settings = null, Color? color = null) {
             _settings = settings ?? _defaultSettings;
 
             _graphicsDevice.SetRenderTarget(_renderTarget1);
-            _graphicsDevice.Clear(Color.TransparentBlack);
+            _graphicsDevice.Clear(color ?? Color.TransparentBlack);
 
             _spriteBatch.Begin(_settings.SortMode, _settings.BlendState, _settings.SamplerState,
                 _settings.DepthStencilState, _settings.RasterizerState, _settings.SpriteEffect, 

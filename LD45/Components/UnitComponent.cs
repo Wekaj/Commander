@@ -35,5 +35,7 @@ namespace LD45.Components {
         public float HealthWeight { get; set; } = 10f;
 
         public float StatDropRate { get; set; } = 0f;
+
+        public bool IsBoss { get; set; } = false;
     }
 }

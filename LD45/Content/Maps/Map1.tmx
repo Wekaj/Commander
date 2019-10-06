@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="128" height="128" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="460">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="128" height="128" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="479">
  <tileset firstgid="1" source="Tiles.tsx"/>
  <tileset firstgid="65" source="TileTypes.tsx"/>
  <tileset firstgid="129" source="Templates.tsx"/>
@@ -1144,7 +1144,7 @@
   <object id="458" type="GremlinBoss" x="563" y="2848">
    <point/>
   </object>
-  <object id="459" type="Recruit" x="2684" y="2076">
+  <object id="466" type="Stat" x="2224" y="1989">
    <point/>
   </object>
  </objectgroup>

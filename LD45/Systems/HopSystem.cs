@@ -1,6 +1,8 @@
 ﻿using Artemis;
 using Artemis.System;
+using LD45.Audio;
 using LD45.Components;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using System;
 
@@ -9,10 +11,14 @@ namespace LD45.Systems {
         private const float _hopTime = 0.2f;
         private const float _hopHeight = 3f;
 
+        private readonly SoundPlayer _soundPlayer;
+
         private float _deltaTime;
 
-        public HopSystem() 
+        public HopSystem(IServiceProvider services) 
             : base(Aspect.All(typeof(HopComponent), typeof(TransformComponent))) {
+
+            _soundPlayer = services.GetRequiredService<SoundPlayer>();
         }
 
         protected override void Begin() {

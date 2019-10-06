@@ -27,7 +27,7 @@ namespace LD45.Actions {
                 force = (targetBodyComponent.Position - bodyComponent.Position) * Force / distance;
             }
 
-            targetUnitComponent.IncomingPackets.Add(new Packet(unit, -Damage, DamageType.Magic, force));
+            targetUnitComponent.IncomingPackets.Add(new Packet(unit, -Damage, DamageType.Magic, force) { Sound = "Zap" });
         }
     }
 }
