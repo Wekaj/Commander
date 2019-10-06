@@ -1,6 +1,7 @@
 ﻿using Artemis;
 using Artemis.Manager;
 using LD45.Actions;
+using LD45.Components;
 using LD45.Controllers;
 using LD45.Entities;
 using LD45.Extensions;
@@ -21,6 +22,7 @@ namespace LD45.Screens {
         private readonly EntityWorld _entityWorld = new EntityWorld();
         private readonly Camera2D _camera = new Camera2D();
         private readonly Random _random = new Random();
+        private readonly ComponentRemover _componentRemover = new ComponentRemover();
         private TileMap _tileMap;
 
         private ServiceContainer _screenServices;
@@ -31,6 +33,7 @@ namespace LD45.Screens {
         private SquadController _squadController;
         private EntitySpawner _spawner;
         private EntityBuilder _entityBuilder;
+        private ActionList _actions;
 
         private Texture2D _swordIconTexture;
 
@@ -46,6 +49,11 @@ namespace LD45.Screens {
 
             _entityBuilder = new EntityBuilder(_screenServices);
             _screenServices.SetService(_entityBuilder);
+
+            _actions = new ActionList(_screenServices);
+            _screenServices.SetService(_actions);
+
+            _entityBuilder.Actions = _actions;
 
             _renderer = _screenServices.GetRequiredService<Renderer2D>();
             _rendererSettings = new RendererSettings {
@@ -89,13 +97,23 @@ namespace LD45.Screens {
                         _entityBuilder.CreateSpiderMother(center);
                         break;
                     }
+                    case "BombGremlin": {
+                        _entityBuilder.CreateBombGremlin(center);
+                        break;
+                    }
+
+                    case "Sword": {
+                        _entityBuilder.CreateWeapon(center, new Weapon {
+                            Action = _actions.SwordSlash,
+                            Icon = _swordIconTexture
+                        });
+                        break;
+                    }
                 }
             }
 
-            _entityBuilder.CreateCommander(new Vector2(32f, 32f), new Weapon { Action = new HitAction(), Icon = _swordIconTexture }, Color.SeaGreen);
-            _entityBuilder.CreateCommander(new Vector2(64f, 32f), new Weapon { Action = new ShootAction(), Icon = _swordIconTexture }, Color.PaleVioletRed);
-
-            _entityBuilder.CreateWeapon(new Vector2(128f, 128f), new Weapon { Action = new HitAction(), Icon = _swordIconTexture });
+            _entityBuilder.CreateCommander(new Vector2(32f, 32f), new Weapon { Action = _actions.Punch, Icon = null }, Color.SeaGreen);
+            _entityBuilder.CreateCommander(new Vector2(64f, 32f), new Weapon { Action = _actions.Punch, Icon = null }, Color.PaleVioletRed);
 
             _entityBuilder.CreateStatDrop(new Vector2(160f, 128f));
             _entityBuilder.CreateStatDrop(new Vector2(160f, 160f));
@@ -107,6 +125,7 @@ namespace LD45.Screens {
             _screenServices.SetService(_entityWorld);
             _screenServices.SetService(_camera);
             _screenServices.SetService(_random);
+            _screenServices.SetService(_componentRemover);
         }
 
         private void LoadContent(IServiceProvider services) {
@@ -125,8 +144,10 @@ namespace LD45.Screens {
             _entityWorld.SystemManager.SetSystem(new StatPickupSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new UnitActionSystem(services), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new UnitCooldownSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new BombSystem(services), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new PacketSystem(services), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BodyPhysicsSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new ProjectileSystem(services), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new ParticleAnimatingSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new IndicatorAnimatingSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new CommanderAnimatingSystem(), GameLoopType.Update);
@@ -150,6 +171,7 @@ namespace LD45.Screens {
             _entityWorld.Update(gameTime.ElapsedGameTime.Ticks);
 
             _spawner.Spawn();
+            _componentRemover.Execute();
         }
 
         public void Draw(GameTime gameTime) {

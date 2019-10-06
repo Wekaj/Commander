@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="128" height="128" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="45">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="128" height="128" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="51">
  <tileset firstgid="1" source="Tiles.tsx"/>
  <tileset firstgid="65" source="TileTypes.tsx"/>
  <tileset firstgid="129" source="Templates.tsx"/>
@@ -311,6 +311,24 @@
    <point/>
   </object>
   <object id="44" type="SpiderMother" x="290.667" y="443.333">
+   <point/>
+  </object>
+  <object id="45" type="Sword" x="74" y="319.333">
+   <point/>
+  </object>
+  <object id="46" type="Sword" x="497.333" y="157.333">
+   <point/>
+  </object>
+  <object id="47" type="Sword" x="621.333" y="219.333">
+   <point/>
+  </object>
+  <object id="48" type="BombGremlin" x="151.333" y="551.333">
+   <point/>
+  </object>
+  <object id="49" type="BombGremlin" x="164" y="538">
+   <point/>
+  </object>
+  <object id="50" type="BombGremlin" x="132.667" y="546">
    <point/>
   </object>
  </objectgroup>

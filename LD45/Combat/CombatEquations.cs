@@ -93,6 +93,10 @@ namespace LD45.Combat {
         }
 
         private static CommanderComponent GetCommanderComponent(Entity entity) {
+            if (entity == null) {
+                return _defaultCommanderComponent;
+            }
+
             var unitComponent = entity.GetComponent<UnitComponent>();
 
             if (unitComponent.Commander != null) {

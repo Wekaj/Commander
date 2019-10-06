@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LD45.Extensions;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
@@ -55,7 +56,7 @@ namespace LD45.Graphics {
             Rectangle? sourceRectangle = null, Vector2? origin = null, float rotation = 0f, 
             Vector2? scale = null, Color? color = null) {
 
-            _spriteBatch.Draw(texture, position, sourceRectangle, color ?? Color.White, rotation, origin ?? Vector2.Zero, scale ?? Vector2.One, SpriteEffects.None, 0f);
+            _spriteBatch.Draw(texture, position.Floor(), sourceRectangle, color ?? Color.White, rotation, (origin ?? Vector2.Zero).Floor(), scale ?? Vector2.One, SpriteEffects.None, 0f);
         }
 
         public void Draw(SpriteFont font, string text, Vector2 position,

@@ -14,22 +14,21 @@ using System;
 
 namespace LD45.Entities {
     public sealed class EntityBuilder {
-        private readonly IServiceProvider _services;
-
         private readonly EntityWorld _entityWorld;
         private readonly Random _random;
 
         private Texture2D _personTexture, _spiderTexture, _swordIconTexture,
-            _flagPoleTexture, _flagTexture, _spiderQueenTexture;
+            _flagPoleTexture, _flagTexture, _spiderQueenTexture, _bombGremlinTexture,
+            _bombTexture, _explosionTexture;
 
         public EntityBuilder(IServiceProvider services) {
-            _services = services;
-
             _entityWorld = services.GetRequiredService<EntityWorld>();
             _random = services.GetRequiredService<Random>();
 
             LoadContent(services);
         }
+
+        public ActionList Actions { get; set; }
 
         private void LoadContent(IServiceProvider services) {
             var content = services.GetRequiredService<ContentManager>();
@@ -40,18 +39,22 @@ namespace LD45.Entities {
             _swordIconTexture = content.Load<Texture2D>("Textures/SwordIcon");
             _flagPoleTexture = content.Load<Texture2D>("Textures/FlagPole");
             _flagTexture = content.Load<Texture2D>("Textures/Flag");
+            _bombGremlinTexture = content.Load<Texture2D>("Textures/BombGremlin");
+            _bombTexture = content.Load<Texture2D>("Textures/Bomb");
+            _explosionTexture = content.Load<Texture2D>("Textures/Explosion");
         }
 
-        public Entity CreateUnit(Vector2 position, int team, IUnitStrategy strategy, IUnitAction action) {
+        public Entity CreateUnit(Vector2 position, int team, int health, float mass, IUnitStrategy strategy, IUnitAction action) {
             Entity unit = _entityWorld.CreateEntity();
 
             unit.AddComponent(new BodyComponent {
-                Position = position
+                Position = position,
+                Mass = mass,
             });
             unit.AddComponent(new TransformComponent());
             unit.AddComponent(new UnitComponent {
-                MaxHealth = 100,
-                Health = 100,
+                MaxHealth = health,
+                Health = health,
                 Team = team,
                 Strategy = strategy,
                 Action = action,
@@ -65,7 +68,7 @@ namespace LD45.Entities {
         }
 
         public Entity CreateSpider(Vector2 position) {
-            Entity spider = CreateUnit(position, 1, new StandardUnitStrategy(), new HitAction());
+            Entity spider = CreateUnit(position, 1, 20, 0.5f, new StandardUnitStrategy(), Actions.SpiderBite);
 
             spider.GetComponent<UnitComponent>().StatDropRate = 0.1f;
 
@@ -78,13 +81,13 @@ namespace LD45.Entities {
         }
 
         public Entity CreateSpiderMother(Vector2 position) {
-            Entity spider = CreateUnit(position, 1, new StandardUnitStrategy(), new ShootAction());
+            Entity spider = CreateUnit(position, 1, 200, 5f, new StandardUnitStrategy(), Actions.SpiderSpit);
 
             spider.GetComponent<UnitComponent>().StatDropRate = 1f;
             spider.GetComponent<UnitComponent>().ActionOrder.AddRange(new IUnitAction[] {
-                new ShootAction(),
-                new ShootAction(),
-                new SummonSpiderAction(_services),
+                Actions.SpiderSpit,
+                Actions.SpiderSpit,
+                Actions.SummonSpider,
             });
 
             spider.GetComponent<ShadowComponent>().Type = ShadowType.Big;
@@ -97,8 +100,56 @@ namespace LD45.Entities {
             return spider;
         }
 
+        public Entity CreateBombGremlin(Vector2 position) {
+            Entity gremlin = CreateUnit(position, 1, 50, 1f, new StandardUnitStrategy(), Actions.ThrowBomb);
+
+            gremlin.GetComponent<UnitComponent>().StatDropRate = 0.25f;
+
+            gremlin.AddComponent(new SpriteComponent {
+                Texture = _bombGremlinTexture,
+                Origin = new Vector2(9f, 22f)
+            });
+
+            return gremlin;
+        }
+
+        public Entity CreateBomb(Vector2 start, Vector2 end) {
+            Entity bomb = _entityWorld.CreateEntity();
+
+            float distance = Vector2.Distance(start, end);
+
+            float speed = 64f * MathHelper.Clamp(1f - (32f - distance) / 32f, 0.1f, 1f);
+            float height = 64f * MathHelper.Clamp(1f - (32f - distance) / 32f, 0.1f, 1f);
+
+            bomb.AddComponent(new BodyComponent {
+                Position = start
+            });
+            bomb.AddComponent(new TransformComponent());
+            bomb.AddComponent(new ShadowComponent {
+                Type = ShadowType.Small
+            });
+            bomb.AddComponent(new ProjectileComponent {
+                Start = start,
+                End = end,
+                Speed = speed,
+                HeightFunction = p => (float)Math.Sin(p * Math.PI) * height
+            });
+            bomb.AddComponent(new SpriteComponent {
+                Texture = _bombTexture,
+                Origin = new Vector2(8f, 12f)
+            });
+            bomb.AddComponent(new BombComponent {
+                Countdown = 4f,
+                Damage = 50,
+                Radius = 24f,
+                Force = 400f,
+            });
+
+            return bomb;
+        }
+
         public Entity CreatePerson(Vector2 position, IUnitStrategy strategy) {
-            Entity person = CreateUnit(position, 0, strategy, null);
+            Entity person = CreateUnit(position, 0, 100, 1f, strategy, null);
 
             person.AddComponent(new SpriteComponent {
                 Texture = _personTexture,
@@ -121,7 +172,7 @@ namespace LD45.Entities {
             flagPole.AddComponent(new TransformComponent());
             flagPole.AddComponent(new SpriteComponent {
                 Texture = _flagPoleTexture,
-                Origin = new Vector2(15.5f, 26f),
+                Origin = new Vector2(15.5f, 26f - 0.001f),
             });
             flagPole.AddComponent(new LinkComponent {
                 Parent = commander,
@@ -132,7 +183,7 @@ namespace LD45.Entities {
             flag.AddComponent(new TransformComponent());
             flag.AddComponent(new SpriteComponent {
                 Texture = _flagTexture,
-                Origin = new Vector2(15.5f, 26f),
+                Origin = new Vector2(15.5f, 26f - 0.002f),
                 Color = flagColor,
             });
             flag.AddComponent(new LinkComponent {
@@ -190,6 +241,19 @@ namespace LD45.Entities {
             });
 
             return stat;
+        }
+
+        public void CreateExplosion(Vector2 position) {
+            Entity explosion = _entityWorld.CreateEntity();
+            explosion.AddComponent(new ParticleComponent {
+                Texture = _explosionTexture,
+                Origin = new Vector2(32f, 32f),
+                ScaleFunction = p => new Vector2(1f - p),
+                LifeDuration = 0.2f,
+            });
+            explosion.AddComponent(new TransformComponent {
+                Position = position
+            });
         }
 
         private StatDropComponent CreateRandomStatDropComponent() {
