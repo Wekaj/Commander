@@ -205,6 +205,22 @@ namespace LD45.Screens {
 
             _entityBuilder.CreateStatDrop(new Vector2(160f, 128f));
             _entityBuilder.CreateStatDrop(new Vector2(160f, 160f));
+
+            int i = 0;
+            foreach (Entity commander in _entityWorld.EntityManager.GetEntities(_commanderAspect)) {
+                var transformComponent = commander.GetComponent<TransformComponent>();
+
+                _fogEffect.Parameters["Center" + i].SetValue(_camera.ToView(transformComponent.Position - transformComponent.Offset));
+
+                i++;
+                if (i >= 8) {
+                    break;
+                }
+            }
+
+            for (; i < 8; i++) {
+                _fogEffect.Parameters["Center" + i].SetValue(new Vector2(-256f));
+            }
         }
 
         private void CreateServiceContainer(IServiceProvider services) {
