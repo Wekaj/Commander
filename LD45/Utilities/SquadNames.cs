@@ -21,7 +21,7 @@ namespace LD45.Utilities {
                 "Loss", "Lack",
                 "Mass", "Mutiny", "Mix", "Masters", "Murder",
                 "Nation", "Nest",
-                "Party", "Posse", "Populace", "Proletariat", "Plate",
+                "Party", "Posse", "Populace", "Proletariat",
                 "Squad", "Society", "Suite", "Selection",
                 "Troop", "Tray"
             });

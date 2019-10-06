@@ -53,15 +53,23 @@ namespace LD45.Systems {
             _renderer.Draw(spriteComponent.Texture, _topLeft + new Vector2(9f, 5f));
             _renderer.Draw(_font, "Cmdr. David", _topLeft + new Vector2(26f, 7f), Color.Lerp(Color.Black, Color.White, 0.1f));
 
-            _renderer.Draw(_bannerLeftTexture, _topLeft + new Vector2(16f, 14f), color: commanderComponent.FlagColor);
+            if (commanderComponent.Squad.Count > 0) {
+                _renderer.Draw(_bannerLeftTexture, _topLeft + new Vector2(16f, 14f), color: commanderComponent.FlagColor);
 
-            var bannerRect = new Rectangle(0, 0, (int)_font.MeasureString(commanderComponent.SquadName).X + 8, _bannerTexture.Height);
-            _renderer.Draw(_bannerTexture, _topLeft + new Vector2(16f + _bannerLeftTexture.Width, 14f), 
-                color: commanderComponent.FlagColor, sourceRectangle: bannerRect);
+                var bannerRect = new Rectangle(0, 0, (int)_font.MeasureString(commanderComponent.SquadName).X + 8, _bannerTexture.Height);
+                _renderer.Draw(_bannerTexture, _topLeft + new Vector2(16f + _bannerLeftTexture.Width, 14f),
+                    color: commanderComponent.FlagColor, sourceRectangle: bannerRect);
 
-            _renderer.Draw(_font, commanderComponent.SquadName, _topLeft + new Vector2(23f, 22f), Color.Lerp(Color.Black, Color.White, 0.25f));
-            _renderer.Draw(_font, commanderComponent.SquadName, _topLeft + new Vector2(22f, 21f), Color.Lerp(Color.Black, Color.White, 0.95f));
-            _renderer.Draw(_shieldTexture, _topLeft + new Vector2(16f + bannerRect.Width, 14f));
+                _renderer.Draw(_font, commanderComponent.SquadName, _topLeft + new Vector2(23f, 22f), Color.Lerp(Color.Black, Color.White, 0.25f));
+                _renderer.Draw(_font, commanderComponent.SquadName, _topLeft + new Vector2(22f, 21f), Color.Lerp(Color.Black, Color.White, 0.95f));
+                _renderer.Draw(_shieldTexture, _topLeft + new Vector2(16f + bannerRect.Width, 14f));
+
+                for (int i = 0; i < commanderComponent.Squad.Count; i++) {
+                    var followerSpriteComponent = commanderComponent.Squad[i].GetComponent<SpriteComponent>();
+
+                    _renderer.Draw(followerSpriteComponent.Texture, _topLeft + new Vector2(16f + bannerRect.Width - i * 8f, 30f));
+                }
+            }
 
             _topLeft += new Vector2(_indentNext ? _indentWidth : 0f, _labelGap);
 
