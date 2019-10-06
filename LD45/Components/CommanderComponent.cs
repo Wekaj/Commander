@@ -11,6 +11,7 @@ namespace LD45.Components {
 
         public List<Entity> Squad { get; } = new List<Entity>();
         public string SquadName { get; set; } = "The Collective of Creeps";
+        public string Name { get; set; }
 
         public IWeapon Weapon { get; set; } = null;
 

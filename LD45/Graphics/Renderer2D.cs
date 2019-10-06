@@ -75,7 +75,7 @@ namespace LD45.Graphics {
             _graphicsDevice.SetRenderTarget(_renderTarget2);
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp, effect: _settings.LayerEffect);
-            _spriteBatch.Draw(_renderTarget1, Vector2.Zero, color: Color.White);
+            _spriteBatch.Draw(_renderTarget1, Vector2.Zero);
             _spriteBatch.End();
         }
 
@@ -83,7 +83,7 @@ namespace LD45.Graphics {
             _graphicsDevice.SetRenderTargets(_defaultTargets);
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-            _spriteBatch.Draw(_renderTarget2, Vector2.Zero, color: Color.White, scale: new Vector2(Scale));
+            _spriteBatch.Draw(_renderTarget2, Vector2.Zero, scale: new Vector2(Scale));
             _spriteBatch.End();
 
             if (_boundsUpdatePending) {

@@ -20,6 +20,7 @@ namespace LD45.Entities {
         private Texture2D _personTexture, _spiderTexture, _swordIconTexture,
             _flagPoleTexture, _flagTexture, _spiderQueenTexture, _bombGremlinTexture,
             _bombTexture, _explosionTexture;
+        private Texture2D[] _personTextures = new Texture2D[10];
 
         public EntityBuilder(IServiceProvider services) {
             _entityWorld = services.GetRequiredService<EntityWorld>();
@@ -33,7 +34,7 @@ namespace LD45.Entities {
         private void LoadContent(IServiceProvider services) {
             var content = services.GetRequiredService<ContentManager>();
 
-            _personTexture = content.Load<Texture2D>("Textures/Person");
+            _personTexture = content.Load<Texture2D>("Textures/Person1");
             _spiderTexture = content.Load<Texture2D>("Textures/Spider");
             _spiderQueenTexture = content.Load<Texture2D>("Textures/SpiderMother");
             _swordIconTexture = content.Load<Texture2D>("Textures/SwordIcon");
@@ -42,6 +43,10 @@ namespace LD45.Entities {
             _bombGremlinTexture = content.Load<Texture2D>("Textures/BombGremlin");
             _bombTexture = content.Load<Texture2D>("Textures/Bomb");
             _explosionTexture = content.Load<Texture2D>("Textures/Explosion");
+
+            for (int i = 0; i < _personTextures.Length; i++) {
+                _personTextures[i] = content.Load<Texture2D>("Textures/Person" + (i + 1));
+            }
         }
 
         public Entity CreateUnit(Vector2 position, int team, int health, float mass, IUnitStrategy strategy, IUnitAction action) {
@@ -152,20 +157,21 @@ namespace LD45.Entities {
             Entity person = CreateUnit(position, 0, 100, 1f, strategy, null);
 
             person.AddComponent(new SpriteComponent {
-                Texture = _personTexture,
+                Texture = _personTextures[_random.Next(_personTextures.Length)],
                 Origin = new Vector2(4.5f, 11f)
             });
 
             return person;
         }
 
-        public Entity CreateCommander(Vector2 position, IWeapon weapon, Color flagColor) {
+        public Entity CreateCommander(Vector2 position, string name, IWeapon weapon, Color flagColor) {
             Entity commander = CreatePerson(position, new CommanderStrategy());
 
             commander.AddComponent(new CommanderComponent {
                 Weapon = weapon,
                 FlagColor = flagColor,
-                SquadName = SquadNames.Generate(_random)
+                SquadName = SquadNames.Generate(_random),
+                Name = "Cmdr. " + name,
             });
 
             Entity flagPole = _entityWorld.CreateEntity();
@@ -192,6 +198,18 @@ namespace LD45.Entities {
             });
             flag.AddComponent(new AnimationComponent {
                 Animation = new Animation(_flagTexture, 4, 0.1f)
+            });
+
+            return commander;
+        }
+
+        public Entity CreateRecruitableCommander(Vector2 position, string name, IWeapon weapon, Color flagColor) {
+            Entity commander = CreateCommander(position, name, weapon, flagColor);
+
+            var commanderComponent = commander.GetComponent<CommanderComponent>();
+            commander.RemoveComponent<CommanderComponent>();
+            commander.AddComponent(new RecruitableComponent {
+                CommanderComponent = commanderComponent
             });
 
             return commander;

@@ -23,7 +23,7 @@ namespace LD45.Actions {
             Cooldown = 3f,
         };
         public IUnitAction StickSlash { get; } = new HitAction {
-            Damage = 2,
+            Damage = 3,
             Force = 200f,
             Range = 9f,
             Cooldown = 2.5f,
@@ -34,6 +34,13 @@ namespace LD45.Actions {
             Range = 8f,
             Cooldown = 2f,
         };
+        public IUnitAction BowShoot { get; } = new ShootAction {
+            Damage = 3,
+            Force = 100f,
+            Range = 72f,
+            Cooldown = 3f,
+        };
+        public IUnitAction StaffHeal { get; } = new HealAction();
 
         public IUnitAction SpiderBite { get; } = new HitAction {
             Damage = 4,

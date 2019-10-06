@@ -15,6 +15,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using TiledSharp;
 
 namespace LD45.Screens {
@@ -35,7 +36,30 @@ namespace LD45.Screens {
         private EntityBuilder _entityBuilder;
         private ActionList _actions;
 
-        private Texture2D _swordIconTexture;
+        private Texture2D _swordIconTexture, _stickIconTexture, _bowIconTexture, _staffIconTexture;
+        private Effect _fogEffect;
+
+        private readonly List<Color> _flagColors = new List<Color> {
+            Color.SeaGreen,
+            Color.PaleVioletRed,
+            Color.PaleGoldenrod,
+            Color.PaleGreen,
+            Color.LightBlue,
+            Color.LightYellow,
+            Color.LightCyan,
+        };
+
+        private Color PopColor() {
+            int r = _random.Next(_flagColors.Count);
+
+            Color c = _flagColors[r];
+
+            _flagColors.RemoveAt(r);
+
+            return c;
+        }
+
+        private readonly Aspect _commanderAspect = Aspect.All(typeof(CommanderComponent), typeof(TransformComponent));
 
         public event ScreenEventHandler PushedScreen;
         public event ScreenEventHandler ReplacedSelf;
@@ -85,10 +109,23 @@ namespace LD45.Screens {
                 var center = new Vector2((float)(obj.X + obj.Width / 2f), (float)(obj.Y - obj.Height / 2f));
 
                 switch (obj.Type) {
+                    case "StartingCommander": {
+                        _entityBuilder.CreateCommander(center, obj.Properties["Name"], 
+                            new Weapon { Action = _actions.Punch, Icon = null }, PopColor());
+
+                        _camera.Position = center - _renderer.Bounds.Size.ToVector2() / 2f;
+                        break;
+                    }
+                    case "Commander": {
+                        _entityBuilder.CreateRecruitableCommander(center, obj.Properties["Name"], 
+                            new Weapon { Action = _actions.Punch, Icon = null }, PopColor());
+                        break;
+                    }
                     case "Recruit": {
                         _entityBuilder.CreateRecruit(center);
                         break;
                     }
+
                     case "Spider": {
                         _entityBuilder.CreateSpider(center);
                         break;
@@ -109,11 +146,36 @@ namespace LD45.Screens {
                         });
                         break;
                     }
+                    case "Stick": {
+                        _entityBuilder.CreateWeapon(center, new Weapon {
+                            Action = _actions.StickSlash,
+                            Icon = _stickIconTexture
+                        });
+                        break;
+                    }
+                    case "Bow": {
+                        _entityBuilder.CreateWeapon(center, new Weapon {
+                            Action = _actions.BowShoot,
+                            Icon = _bowIconTexture
+                        });
+                        break;
+                    }
+                    case "Staff": {
+                        _entityBuilder.CreateWeapon(center, new Weapon {
+                            Action = _actions.StaffHeal,
+                            Icon = _staffIconTexture
+                        });
+                        break;
+                    }
+                    case "Stat": {
+                        _entityBuilder.CreateStatDrop(center);
+                        break;
+                    }
                 }
             }
 
-            _entityBuilder.CreateCommander(new Vector2(32f, 32f), new Weapon { Action = _actions.Punch, Icon = null }, Color.SeaGreen);
-            _entityBuilder.CreateCommander(new Vector2(64f, 32f), new Weapon { Action = _actions.Punch, Icon = null }, Color.PaleVioletRed);
+            //_entityBuilder.CreateCommander(new Vector2(32f, 32f), new Weapon { Action = _actions.Punch, Icon = null }, Color.SeaGreen);
+            //_entityBuilder.CreateCommander(new Vector2(64f, 32f), new Weapon { Action = _actions.Punch, Icon = null }, Color.PaleVioletRed);
 
             _entityBuilder.CreateStatDrop(new Vector2(160f, 128f));
             _entityBuilder.CreateStatDrop(new Vector2(160f, 160f));
@@ -132,6 +194,15 @@ namespace LD45.Screens {
             var content = services.GetRequiredService<ContentManager>();
 
             _swordIconTexture = content.Load<Texture2D>("Textures/SwordIcon");
+            _stickIconTexture = content.Load<Texture2D>("Textures/StickIcon");
+            _bowIconTexture = content.Load<Texture2D>("Textures/BowIcon");
+            _staffIconTexture = content.Load<Texture2D>("Textures/StaffIcon");
+
+            _fogEffect = content.Load<Effect>("Effects/Fog");
+            _fogEffect.Parameters["ClearRadiusSqr"].SetValue(256f * 256f);
+            _fogEffect.Parameters["ClearBorderRadiusSqr"].SetValue(254f * 254f);
+            _fogEffect.Parameters["FogColor"].SetValue(Color.Lerp(Color.White, Color.Black, 1f).ToVector4());
+            _rendererSettings.LayerEffect = _fogEffect;
         }
 
         private void InitializeSystems(IServiceProvider services) {
@@ -139,7 +210,7 @@ namespace LD45.Screens {
             _entityWorld.SystemManager.SetSystem(new UnitStrategySystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new TileCollisionSystem(services), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new BodyTransformSystem(), GameLoopType.Update);
-            _entityWorld.SystemManager.SetSystem(new RecruitingSystem(), GameLoopType.Update);
+            _entityWorld.SystemManager.SetSystem(new RecruitingSystem(services), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new WeaponPickupSystem(services), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new StatPickupSystem(), GameLoopType.Update);
             _entityWorld.SystemManager.SetSystem(new UnitActionSystem(services), GameLoopType.Update);
@@ -172,10 +243,28 @@ namespace LD45.Screens {
 
             _spawner.Spawn();
             _componentRemover.Execute();
+
+            int i = 0;
+            foreach (Entity commander in _entityWorld.EntityManager.GetEntities(_commanderAspect)) {
+                var transformComponent = commander.GetComponent<TransformComponent>();
+
+                _fogEffect.Parameters["Center" + i].SetValue(_camera.ToView(transformComponent.Position));
+
+                i++;
+                if (i >= 8) {
+                    break;
+                }
+            }
+
+            for (; i < 8; i++) {
+                _fogEffect.Parameters["Center" + i].SetValue(new Vector2(-256f));
+            }
         }
 
         public void Draw(GameTime gameTime) {
             _renderer.Refresh();
+
+            _fogEffect.Parameters["Dimensions"].SetValue(_renderer.Bounds.Size.ToVector2());
 
             _rendererSettings.TransformMatrix = _camera.GetTransformMatrix();
             _renderer.Begin(_rendererSettings);

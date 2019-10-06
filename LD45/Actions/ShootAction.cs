@@ -5,13 +5,14 @@ using Microsoft.Xna.Framework;
 
 namespace LD45.Actions {
     public sealed class ShootAction : IUnitAction {
+        public bool TargetsAllies { get; } = false;
+        public ActionAnimation Animation { get; } = ActionAnimation.Projectile;
+        public ActionFlags Flags { get; }
+
         public int Damage { get; set; } = 1;
         public float Force { get; set; } = 100f;
         public float Range { get; set; } = 64f;
         public float Cooldown { get; set; } = 1f;
-
-        public bool TargetsAllies { get; } = false;
-        public ActionAnimation Animation { get; } = ActionAnimation.Projectile;
 
         public void Perform(Entity unit, Entity target) {
             var bodyComponent = unit.GetComponent<BodyComponent>();

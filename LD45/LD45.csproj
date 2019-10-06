@@ -43,6 +43,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Actions\ActionFlags.cs" />
     <Compile Include="Actions\ActionList.cs" />
     <Compile Include="Actions\HealAction.cs" />
     <Compile Include="Actions\HitAction.cs" />

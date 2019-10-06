@@ -47,6 +47,7 @@ namespace LD45.Systems {
             base.Begin();
 
             _topLeft = new Vector2(12f);
+            _indentNext = true;
 
             // A little hacky.
             _renderer.End();
@@ -59,7 +60,7 @@ namespace LD45.Systems {
 
             _renderer.Draw(_labelTexture, _topLeft);
             _renderer.Draw(spriteComponent.Texture, _topLeft + new Vector2(9f, 5f));
-            _renderer.Draw(_font, "Cmdr. David", _topLeft + new Vector2(26f, 7f), Color.Lerp(Color.Black, Color.White, 0.1f));
+            _renderer.Draw(_font, commanderComponent.Name, _topLeft + new Vector2(26f, 7f), Color.Lerp(Color.Black, Color.White, 0.1f));
 
             if (commanderComponent.Weapon.Icon != null) {
                 _renderer.Draw(_tagTexture, _topLeft + new Vector2(192f, 0f));

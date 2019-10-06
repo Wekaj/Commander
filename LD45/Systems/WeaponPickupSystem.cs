@@ -1,6 +1,8 @@
 ﻿using Artemis;
 using Artemis.System;
 using LD45.Components;
+using LD45.Entities;
+using LD45.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -14,10 +16,16 @@ namespace LD45.Systems {
 
         private readonly Aspect _weaponAspect = Aspect.All(typeof(WeaponComponent), typeof(BodyComponent));
 
+        private readonly EntityBuilder _entityBuilder;
+        private readonly Random _random;
+
         private Texture2D _shinyTexture;
 
         public WeaponPickupSystem(IServiceProvider services) 
             : base(Aspect.All(typeof(CommanderComponent), typeof(BodyComponent))) {
+
+            _entityBuilder = services.GetRequiredService<EntityBuilder>();
+            _random = services.GetRequiredService<Random>();
 
             LoadContent(services);
         }
@@ -39,6 +47,14 @@ namespace LD45.Systems {
                 float distanceSqr = Vector2.DistanceSquared(bodyComponent.Position, weaponBodyComponent.Position);
 
                 if (distanceSqr < _pickupDistanceSqr) {
+                    if (commanderComponent.Weapon.Icon != null) {
+                        Vector2 direction = _random.NextUnitVector();
+
+                        Entity discarded = _entityBuilder.CreateWeapon(bodyComponent.Position + direction * 17f, commanderComponent.Weapon);
+
+                        discarded.GetComponent<BodyComponent>().Impulse += direction * 100f;
+                    }
+
                     commanderComponent.Weapon = weaponComponent.Weapon;
 
                     CreateShiny(bodyComponent.Position);

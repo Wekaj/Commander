@@ -17,11 +17,12 @@ namespace LD45.Actions {
             _random = services.GetRequiredService<Random>();
         }
 
-        public float Range { get; set; } = 128f;
-        public float Cooldown { get; set; } = 5f;
-
         public bool TargetsAllies { get; } = false;
         public ActionAnimation Animation { get; } = ActionAnimation.None;
+        public ActionFlags Flags { get; }
+
+        public float Range { get; set; } = 128f;
+        public float Cooldown { get; set; } = 5f;
 
         public void Perform(Entity unit, Entity target) {
             var bodyComponent = unit.GetComponent<BodyComponent>();

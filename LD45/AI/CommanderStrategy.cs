@@ -1,12 +1,14 @@
 ﻿using Artemis;
 using LD45.Components;
 using Microsoft.Xna.Framework;
+using System.Linq;
 
 namespace LD45.AI {
     public sealed class CommanderStrategy : IUnitStrategy {
         private const float _passingDistance = 12f;
+        private const float _actionRadius = 32f;
 
-        private readonly Aspect _aspect = Aspect.All(typeof(CommanderComponent), typeof(BodyComponent));
+        private readonly Aspect _aspect = Aspect.All(typeof(CommanderComponent), typeof(UnitComponent), typeof(BodyComponent));
 
         public void Update(Entity unit) {
             if (!_aspect.Interests(unit)) {
@@ -14,18 +16,66 @@ namespace LD45.AI {
             }
 
             var commanderComponent = unit.GetComponent<CommanderComponent>();
+            var unitComponent = unit.GetComponent<UnitComponent>();
             var bodyComponent = unit.GetComponent<BodyComponent>();
 
             if (commanderComponent.Path.Count > 0) {
-                Vector2 target = commanderComponent.Path[0];
+                Vector2 targetPosition = commanderComponent.Path[0];
 
-                float distance = Vector2.Distance(bodyComponent.Position, target);
+                float distance = Vector2.Distance(bodyComponent.Position, targetPosition);
+
+                if (commanderComponent.Path.Count == 1 && distance < _actionRadius) {
+                    if (unitComponent.Action != null) {
+                        float CalculateScore(Entity target) {
+                            var targetUnitComponent = target.GetComponent<UnitComponent>();
+                            var targetBodyComponent = target.GetComponent<BodyComponent>();
+
+                            float targetDistance = Vector2.Distance(bodyComponent.Position, targetBodyComponent.Position);
+
+                            float score = 1000f;
+
+                            score -= targetDistance * unitComponent.DistanceWeight;
+
+                            if (targetUnitComponent.Team == unitComponent.Team && !unitComponent.Action.TargetsAllies) {
+                                score = float.NegativeInfinity;
+                            }
+
+                            float distanceToSquad = Vector2.Distance(targetPosition, targetBodyComponent.Position);
+
+                            if (distanceToSquad > _actionRadius + unitComponent.Action.Range) {
+                                score = float.NegativeInfinity;
+                            }
+
+                            return score;
+                        }
+
+                        Entity chosenTarget = unitComponent.VisibleUnits.OrderByDescending(CalculateScore).FirstOrDefault();
+
+                        if (chosenTarget != null) {
+                            var targetUnitComponent = chosenTarget.GetComponent<UnitComponent>();
+                            var targetBodyComponent = chosenTarget.GetComponent<BodyComponent>();
+
+                            if (CalculateScore(chosenTarget) >= 0f) {
+                                float targetDistance = Vector2.Distance(targetBodyComponent.Position, bodyComponent.Position);
+
+                                if (targetDistance > unitComponent.Action.Range) {
+                                    bodyComponent.Force += Vector2.Normalize(targetBodyComponent.Position - bodyComponent.Position) * 150f;
+                                }
+                                else if (unitComponent.CooldownTimer <= 0f) {
+                                    unitComponent.ActionTarget = chosenTarget;
+                                }
+
+                                return;
+                            }
+                        }
+                    }
+                }
 
                 if (distance > _passingDistance) {
-                    bodyComponent.Force += Vector2.Normalize(target - bodyComponent.Position) * 150f;
+                    bodyComponent.Force += Vector2.Normalize(targetPosition - bodyComponent.Position) * 150f;
                 }
                 else if (commanderComponent.Path.Count > 1) {
-                    bodyComponent.Force += Vector2.Normalize(target - bodyComponent.Position) * 150f;
+                    bodyComponent.Force += Vector2.Normalize(targetPosition - bodyComponent.Position) * 150f;
 
                     commanderComponent.Path.RemoveAt(0);
                 }

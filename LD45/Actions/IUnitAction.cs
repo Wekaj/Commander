@@ -11,6 +11,7 @@ namespace LD45.Actions {
         bool TargetsAllies { get; }
         float Cooldown { get; }
         ActionAnimation Animation { get; }
+        ActionFlags Flags { get; }
 
         void Perform(Entity unit, Entity target);
     }

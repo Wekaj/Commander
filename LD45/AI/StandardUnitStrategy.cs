@@ -43,7 +43,7 @@ namespace LD45.AI {
 
                         float score = 1000f;
 
-                        score -= distance * unitComponent.DistanceWeight;
+                        score -= distance * unitComponent.DistanceWeight * (unitComponent.Action.Flags.HasFlag(ActionFlags.PrefersFar) ? -1f : 1f);
 
                         if (targetUnitComponent.Team == unitComponent.Team && !unitComponent.Action.TargetsAllies) {
                             score = float.NegativeInfinity;
