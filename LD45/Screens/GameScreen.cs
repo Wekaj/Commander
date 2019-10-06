@@ -61,7 +61,8 @@ namespace LD45.Screens {
             for (int y = 0; y < map.Height; y++) {
                 for (int x = 0; x < map.Width; x++) {
                     _tileMap[x, y] = new Tile {
-                        Texture = map.Layers[0].Tiles[x + y * map.Width].Gid - 1
+                        Texture = map.Layers[0].Tiles[x + y * map.Width].Gid - 1,
+                        Type = (TileType)map.Layers[1].Tiles[x + y * map.Width].Gid
                     };
                 }
             }

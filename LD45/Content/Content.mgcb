@@ -40,6 +40,9 @@
 #begin Maps/Tiles.tsx
 /copy:Maps/Tiles.tsx
 
+#begin Maps/TileTypes.tsx
+/copy:Maps/TileTypes.tsx
+
 #begin Textures/Arrow.png
 /importer:TextureImporter
 /processor:TextureProcessor

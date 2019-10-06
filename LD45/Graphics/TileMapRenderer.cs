@@ -8,11 +8,13 @@ using System;
 namespace LD45.Graphics {
     public sealed class TileMapRenderer {
         private readonly Renderer2D _renderer;
+        private readonly Camera2D _camera;
 
         private Texture2D _tilesTexture;
 
         public TileMapRenderer(IServiceProvider services) {
             _renderer = services.GetRequiredService<Renderer2D>();
+            _camera = services.GetRequiredService<Camera2D>();
 
             LoadContent(services);
         }
@@ -24,8 +26,16 @@ namespace LD45.Graphics {
         }
 
         public void Draw(TileMap tileMap) {
-            for (int y = 0; y < tileMap.Height; y++) {
-                for (int x = 0; x < tileMap.Width; x++) {
+            Rectangle bounds = _renderer.Bounds;
+            bounds.Offset(_camera.Position);
+
+            int startX = Math.Max(bounds.Left / Constants.TileSize - 1, 0);
+            int startY = Math.Max(bounds.Top / Constants.TileSize - 1, 0);
+            int endX = Math.Min(bounds.Right / Constants.TileSize + 1, tileMap.Width - 1);
+            int endY = Math.Min(bounds.Bottom / Constants.TileSize + 1, tileMap.Height - 1);
+
+            for (int y = startY; y <= endY; y++) {
+                for (int x = startX; x <= endX; x++) {
                     int texture = tileMap[x, y].Texture;
 
                     int textureX = texture % 8;
