@@ -23,5 +23,6 @@ namespace LD45.Components {
         public int Stability { get; set; }
         public int Range { get; set; }
         public int Speed { get; set; }
+        public int Accuracy { get; set; }
     }
 }

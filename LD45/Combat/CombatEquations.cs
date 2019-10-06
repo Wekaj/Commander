@@ -1,5 +1,6 @@
 ﻿using Artemis;
 using LD45.Components;
+using LD45.Extensions;
 using Microsoft.Xna.Framework;
 using System;
 
@@ -9,10 +10,14 @@ namespace LD45.Combat {
         private const float _magicBonus = 1f / 3f;
         private const float _forceBonus = 1f / 3f;
         private const float _speedBonus = 1f / 3f;
+        private const float _accuracyBonus = 0.1f;
 
         private static readonly CommanderComponent _defaultCommanderComponent = new CommanderComponent();
+        private static readonly Random _random = new Random();
 
-        public static int CalculateDamage(Entity target, Packet packet) {
+        public static int CalculateDamage(Entity target, Packet packet, out bool crit) {
+            crit = false;
+
             if (packet.HealthChange >= 0) {
                 return 0;
             }
@@ -31,6 +36,12 @@ namespace LD45.Combat {
                     modifier *= 1f + (sourceCommanderComponent.Magic - targetCommanderComponent.Resistance) * _magicBonus;
                     break;
                 }
+            }
+
+            float critChance = sourceCommanderComponent.Accuracy * _accuracyBonus;
+            if (_random.NextSingle() < critChance) {
+                modifier *= 3f;
+                crit = true;
             }
 
             modifier = Math.Max(modifier, 0f);

@@ -21,7 +21,7 @@ namespace LD45.Systems {
             for (int i = 0; i < unitComponent.IncomingPackets.Count; i++) {
                 Packet packet = unitComponent.IncomingPackets[i];
 
-                int damage = CombatEquations.CalculateDamage(entity, packet);
+                int damage = CombatEquations.CalculateDamage(entity, packet, out bool crit);
                 int healing = CombatEquations.CalculateHealing(entity, packet);
 
                 int healthChange = healing - damage;
