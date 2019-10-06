@@ -72,6 +72,8 @@ namespace LD45.Systems {
                     var followerUnitComponent = commanderComponent.Squad[i].GetComponent<UnitComponent>();
 
                     followerUnitComponent.Commander = null;
+
+                    commanderComponent.Squad[i].AddComponent(new RecruitableComponent());
                 }
             }
 
