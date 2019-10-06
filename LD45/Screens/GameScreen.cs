@@ -69,16 +69,23 @@ namespace LD45.Screens {
 
             InitializeSystems(_screenServices);
 
+            foreach (TmxObject obj in map.ObjectGroups[0].Objects) {
+                var center = new Vector2((float)(obj.X + obj.Width / 2f), (float)(obj.Y - obj.Height / 2f));
+
+                switch (obj.Type) {
+                    case "Recruit": {
+                        _entityBuilder.CreateRecruit(center);
+                        break;
+                    }
+                    case "Spider": {
+                        _entityBuilder.CreateSpider(center);
+                        break;
+                    }
+                }
+            }
+
             _entityBuilder.CreateCommander(new Vector2(32f, 32f), new Weapon { Action = new HitAction(), Icon = _swordIconTexture }, Color.SeaGreen);
             _entityBuilder.CreateCommander(new Vector2(64f, 32f), new Weapon { Action = new ShootAction(), Icon = _swordIconTexture }, Color.PaleVioletRed);
-
-            for (int i = 0; i < 10; i++) {
-                _entityBuilder.CreateRecruit(new Vector2(32f + random.NextSingle(128f), 32f + random.NextSingle(128f)));
-            }
-
-            for (int i = 0; i < 10; i++) {
-                _entityBuilder.CreateSpider(new Vector2(256f) + new Vector2(random.NextSingle(64f), random.NextSingle(64f)));
-            }
 
             _entityBuilder.CreateWeapon(new Vector2(128f, 128f), new Weapon { Action = new HitAction(), Icon = _swordIconTexture });
 

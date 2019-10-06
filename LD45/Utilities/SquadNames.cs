@@ -9,40 +9,38 @@ namespace LD45.Utilities {
         static SquadNames() {
             AddFirstParts(new string[] {
                 "Assemblage", "Assembly",
-                "Band", "Bunch", "Bundle",
+                "Band", "Bunch", "Bundle", "Board",
                 "Collective", "Company", "Crowd", "Club",
-                "Destruction", "Doom",
-                "Empire", "Exile",
-                "Flock", "Failure", "Field",
+                "Dozen", "Dump",
+                "Empire",
+                "Flock", "Faculty", "Frenzy",
                 "Group", "Gathering", "Gang", 
                 "Herd", "House",
-                "Jumble",
-                "Kollective", "Kompany", "Krowd", "Klub",
-                "Loss", "Lack",
-                "Mass", "Mutiny", "Mix", "Masters", "Murder",
+                "Jumble", "Jury",
+                "Lark", "League",
+                "Mass", "Mix", "Murder",
                 "Nation", "Nest",
                 "Party", "Posse", "Populace", "Proletariat",
                 "Squad", "Society", "Suite", "Selection",
-                "Troop", "Tray"
+                "Troop", "Tribe"
             });
 
             AddSecondParts(new string[] {
                 "Aces", "Adams",
                 "Bros", "Blokes", "Bodies", "Bozos", "Bruisers", "Biscuits", "Bangers", "Babes",
                 "Creeps", "Customers", "Creatures", "Carls", "Cuties",
-                "Davids", "Dumbos", "Dummies", "Darlings", "Dudes", "Doods",
+                "Davids", "Dumbos", "Dummies", "Darlings", "Dudes",
                 "Egos", "Eggs",
-                "Freds", "Fruitcakes",
+                "Freds", "Fruitcakes", "Fools",
                 "Goons", "Grunions", "Gals", "Goobers",
                 "Hooligans", "Helpers",
                 "Jerks", "Jostlers", "Jerries",
-                "Kreeps", "Kustomers", "Kreatures", "Karls", "Kuties", "Koalas", "Kakas",
-                "Lackies", "Lamps", "Laughers",
+                "Lackies", "Laughers",
                 "Mortals", "Muffins", "Misters", "Monsters",
                 "Nerds", "Ninnies", "Nincompoops", 
                 "Peeps", "Plebs", "Plinkers",
                 "Sirs", "Specimens", "Sisters", "Saps", "Sexies",
-                "Terrors", "Thugs"
+                "Terrors", "Thugs", "Toms"
             });
         }
 

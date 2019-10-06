@@ -37,6 +37,9 @@
 #begin Maps/Map1.tmx
 /copy:Maps/Map1.tmx
 
+#begin Maps/Templates.tsx
+/copy:Maps/Templates.tsx
+
 #begin Maps/Tiles.tsx
 /copy:Maps/Tiles.tsx
 

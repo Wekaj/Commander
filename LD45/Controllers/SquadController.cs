@@ -32,7 +32,7 @@ namespace LD45.Controllers {
         public void Update() {
             Vector2 mousePosition = _camera.ToWorld(_input.State.MouseState.Position.ToVector2() / _renderer.Scale);
 
-            if (_input.Bindings.JustPressed(BindingId.LeftClick)) {
+            if (_input.Bindings.JustPressed(BindingId.RightClick)) {
                 Entity closestCommander = null;
                 float closestDistance = float.PositiveInfinity;
 
@@ -56,7 +56,7 @@ namespace LD45.Controllers {
                     commanderComponent.Path.Add(mousePosition);
                 }
             }
-            else if (_input.Bindings.IsPressed(BindingId.LeftClick)) {
+            else if (_input.Bindings.IsPressed(BindingId.RightClick)) {
                 if (_selectedCommander != null) {
                     var commanderComponent = _selectedCommander.GetComponent<CommanderComponent>();
 
@@ -72,14 +72,14 @@ namespace LD45.Controllers {
                     }
                 }
             }
-            else if (_input.Bindings.JustReleased(BindingId.LeftClick)) {
+            else if (_input.Bindings.JustReleased(BindingId.RightClick)) {
                 _selectedCommander = null;
             }
 
-            if (_input.Bindings.JustPressed(BindingId.RightClick)) {
+            if (_input.Bindings.JustPressed(BindingId.LeftClick)) {
                 _panPosition = mousePosition;
             }
-            else if (_input.Bindings.IsPressed(BindingId.RightClick)) {
+            else if (_input.Bindings.IsPressed(BindingId.LeftClick)) {
                 _camera.Position += _panPosition - mousePosition;
             }
         }
