@@ -25,5 +25,9 @@ namespace LD45.Components {
         public int Range { get; set; }
         public int Speed { get; set; }
         public int Accuracy { get; set; }
+
+        public int StatSum() {
+            return Strength + Armor + Magic + Resistance + Force + Strength + Speed + Accuracy;
+        }
     }
 }

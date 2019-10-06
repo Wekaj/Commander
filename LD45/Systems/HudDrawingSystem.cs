@@ -63,6 +63,10 @@ namespace LD45.Systems {
                 _renderer.Draw(_font, commanderComponent.SquadName, _topLeft + new Vector2(23f, 22f), Color.Lerp(Color.Black, Color.White, 0.25f));
                 _renderer.Draw(_font, commanderComponent.SquadName, _topLeft + new Vector2(22f, 21f), Color.Lerp(Color.Black, Color.White, 0.95f));
                 _renderer.Draw(_shieldTexture, _topLeft + new Vector2(16f + bannerRect.Width, 14f));
+                _renderer.Draw(_font, "" + commanderComponent.StatSum(), _topLeft + new Vector2(25f + bannerRect.Width, 23f),
+                    Color.Lerp(commanderComponent.FlagColor, Color.Black, 0.5f), origin: new Vector2(0.5f));
+                _renderer.Draw(_font, "" + commanderComponent.StatSum(), _topLeft + new Vector2(26f + bannerRect.Width, 24f),
+                    commanderComponent.FlagColor, origin: new Vector2(0.5f));
 
                 for (int i = 0; i < commanderComponent.Squad.Count; i++) {
                     var followerSpriteComponent = commanderComponent.Squad[i].GetComponent<SpriteComponent>();
