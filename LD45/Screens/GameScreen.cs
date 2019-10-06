@@ -29,6 +29,7 @@ namespace LD45.Screens {
         private RendererSettings _rendererSettings;
         private TileMapRenderer _tileMapRenderer;
         private SquadController _squadController;
+        private EntitySpawner _spawner;
         private EntityBuilder _entityBuilder;
 
         private Texture2D _swordIconTexture;
@@ -39,6 +40,9 @@ namespace LD45.Screens {
 
         public void Initialize(IServiceProvider services) {
             CreateServiceContainer(services);
+
+            _spawner = new EntitySpawner(_screenServices);
+            _screenServices.SetService(_spawner);
 
             _entityBuilder = new EntityBuilder(_screenServices);
             _screenServices.SetService(_entityBuilder);
@@ -79,6 +83,10 @@ namespace LD45.Screens {
                     }
                     case "Spider": {
                         _entityBuilder.CreateSpider(center);
+                        break;
+                    }
+                    case "SpiderMother": {
+                        _entityBuilder.CreateSpiderMother(center);
                         break;
                     }
                 }
@@ -140,6 +148,8 @@ namespace LD45.Screens {
             _squadController.Update();
 
             _entityWorld.Update(gameTime.ElapsedGameTime.Ticks);
+
+            _spawner.Spawn();
         }
 
         public void Draw(GameTime gameTime) {

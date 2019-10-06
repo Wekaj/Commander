@@ -2,7 +2,8 @@
 
 namespace LD45.Components {
     public enum ShadowType {
-        Small
+        Small,
+        Big
     }
 
     public sealed class ShadowComponent : IComponent {

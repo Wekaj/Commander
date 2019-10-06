@@ -14,13 +14,17 @@ using System;
 
 namespace LD45.Entities {
     public sealed class EntityBuilder {
+        private readonly IServiceProvider _services;
+
         private readonly EntityWorld _entityWorld;
         private readonly Random _random;
 
         private Texture2D _personTexture, _spiderTexture, _swordIconTexture,
-            _flagPoleTexture, _flagTexture;
+            _flagPoleTexture, _flagTexture, _spiderQueenTexture;
 
         public EntityBuilder(IServiceProvider services) {
+            _services = services;
+
             _entityWorld = services.GetRequiredService<EntityWorld>();
             _random = services.GetRequiredService<Random>();
 
@@ -32,6 +36,7 @@ namespace LD45.Entities {
 
             _personTexture = content.Load<Texture2D>("Textures/Person");
             _spiderTexture = content.Load<Texture2D>("Textures/Spider");
+            _spiderQueenTexture = content.Load<Texture2D>("Textures/SpiderMother");
             _swordIconTexture = content.Load<Texture2D>("Textures/SwordIcon");
             _flagPoleTexture = content.Load<Texture2D>("Textures/FlagPole");
             _flagTexture = content.Load<Texture2D>("Textures/Flag");
@@ -62,11 +67,31 @@ namespace LD45.Entities {
         public Entity CreateSpider(Vector2 position) {
             Entity spider = CreateUnit(position, 1, new StandardUnitStrategy(), new HitAction());
 
-            spider.GetComponent<UnitComponent>().StatDropRate = 0.5f;
+            spider.GetComponent<UnitComponent>().StatDropRate = 0.1f;
 
             spider.AddComponent(new SpriteComponent {
                 Texture = _spiderTexture,
                 Origin = new Vector2(6f, 8f)
+            });
+
+            return spider;
+        }
+
+        public Entity CreateSpiderMother(Vector2 position) {
+            Entity spider = CreateUnit(position, 1, new StandardUnitStrategy(), new ShootAction());
+
+            spider.GetComponent<UnitComponent>().StatDropRate = 1f;
+            spider.GetComponent<UnitComponent>().ActionOrder.AddRange(new IUnitAction[] {
+                new ShootAction(),
+                new ShootAction(),
+                new SummonSpiderAction(_services),
+            });
+
+            spider.GetComponent<ShadowComponent>().Type = ShadowType.Big;
+
+            spider.AddComponent(new SpriteComponent {
+                Texture = _spiderQueenTexture,
+                Origin = new Vector2(16f, 18f)
             });
 
             return spider;

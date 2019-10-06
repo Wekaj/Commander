@@ -24,6 +24,8 @@ namespace LD45.Components {
         public Entity ActionTarget { get; set; } = null;
         public float CooldownTimer { get; set; } = 0f;
 
+        public List<IUnitAction> ActionOrder { get; } = new List<IUnitAction>();
+
         public int SightRadius { get; set; } = 100;
         public List<Entity> VisibleUnits { get; } = new List<Entity>();
 

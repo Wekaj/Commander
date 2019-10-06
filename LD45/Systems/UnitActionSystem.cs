@@ -51,6 +51,13 @@ namespace LD45.Systems {
 
             unitComponent.ActionTarget = null;
             unitComponent.CooldownTimer = CombatEquations.CalculateCooldown(entity);
+
+            if (unitComponent.ActionOrder.Count > 0) {
+                unitComponent.ActionOrder.Add(unitComponent.Action);
+
+                unitComponent.Action = unitComponent.ActionOrder[0];
+                unitComponent.ActionOrder.RemoveAt(0);
+            }
         }
 
         private void CreateImpact(Vector2 position, float rotation) {

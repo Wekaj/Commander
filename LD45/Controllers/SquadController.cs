@@ -32,6 +32,10 @@ namespace LD45.Controllers {
         public void Update() {
             Vector2 mousePosition = _camera.ToWorld(_input.State.MouseState.Position.ToVector2() / _renderer.Scale);
 
+            if (_selectedCommander.DeletingState) {
+                _selectedCommander = null;
+            }
+
             if (_input.Bindings.JustPressed(BindingId.RightClick)) {
                 Entity closestCommander = null;
                 float closestDistance = float.PositiveInfinity;

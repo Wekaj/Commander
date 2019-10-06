@@ -12,7 +12,7 @@ namespace LD45.Systems {
     public sealed class ShadowDrawingSystem : EntityProcessingSystem {
         private readonly Renderer2D _renderer;
 
-        private Texture2D _shadowTexture;
+        private Texture2D _shadowTexture, _bigShadowTexture;
 
         public ShadowDrawingSystem(IServiceProvider services) 
             : base(Aspect.All(typeof(TransformComponent), typeof(ShadowComponent))) {
@@ -26,6 +26,7 @@ namespace LD45.Systems {
             var content = services.GetRequiredService<ContentManager>();
 
             _shadowTexture = content.Load<Texture2D>("Textures/SmallShadow");
+            _bigShadowTexture = content.Load<Texture2D>("Textures/BigShadow");
         }
 
         public override void Process(Entity entity) {
@@ -36,6 +37,10 @@ namespace LD45.Systems {
             switch (shadowComponent.Type) {
                 case ShadowType.Small: {
                     texture = _shadowTexture;
+                    break;
+                }
+                case ShadowType.Big: {
+                    texture = _bigShadowTexture;
                     break;
                 }
             }
