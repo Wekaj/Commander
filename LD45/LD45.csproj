@@ -129,6 +129,7 @@
     <Compile Include="Utilities\IServiceContainer.cs" />
     <Compile Include="Utilities\MathUtilities.cs" />
     <Compile Include="Utilities\ServiceContainer.cs" />
+    <Compile Include="Utilities\SquadNames.cs" />
     <Compile Include="Weapons\IWeapon.cs" />
     <Compile Include="Weapons\Weapon.cs" />
   </ItemGroup>

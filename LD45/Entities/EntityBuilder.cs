@@ -4,6 +4,7 @@ using LD45.AI;
 using LD45.Components;
 using LD45.Extensions;
 using LD45.Graphics;
+using LD45.Utilities;
 using LD45.Weapons;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
@@ -88,6 +89,7 @@ namespace LD45.Entities {
             commander.AddComponent(new CommanderComponent {
                 Weapon = weapon,
                 FlagColor = flagColor,
+                SquadName = SquadNames.Generate(_random)
             });
 
             Entity flagPole = _entityWorld.CreateEntity();
